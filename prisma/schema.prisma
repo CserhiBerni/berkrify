@@ -12,3 +12,32 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model zeneszamok {
+    id Int @id @default(autoincrement())
+    artist String
+    album String
+    cim String
+    hossz DateTime
+    kiadas_ev Int
+    mufaj String
+}
+
+model mufaj {
+    id Int @id @default(autoincrement())
+    mufaj String
+}
+
+model kedvencek {
+    id Int @id @default(autoincrement())
+    felhasznalo_id Int
+    zene_id Int
+}
+
+model felhasznalo {
+    id Int @id @default(autoincrement())
+    nev String
+    email String
+    jelszo String
+    letrehozas DateTime
+}
