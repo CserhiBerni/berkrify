@@ -14,30 +14,37 @@ datasource db {
 }
 
 model zeneszamok {
-    id Int @id @default(autoincrement())
-    artist String
-    album String
-    cim String
-    hossz DateTime
-    kiadas_ev Int
-    mufaj String
+    id         Int    @id @default(autoincrement())
+    artist     String
+    album      String
+    cim        String
+    hossz      DateTime
+    kiadas_ev  Int
+    mufaj      String
+    mp3        Bytes  
+    boritokep  Bytes? 
+    kedvencek  kedvencek[] 
 }
 
 model mufaj {
-    id Int @id @default(autoincrement())
+    id    Int    @id @default(autoincrement())
     mufaj String
 }
 
 model kedvencek {
-    id Int @id @default(autoincrement())
+    id            Int @id @default(autoincrement())
     felhasznalo_id Int
-    zene_id Int
+    zene_id       Int
+    felhasznalo   felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: Cascade)
+    zene          zeneszamok @relation(fields: [zene_id], references: [id], onDelete: Cascade)
 }
 
 model felhasznalo {
-    id Int @id @default(autoincrement())
-    nev String
-    email String
-    jelszo String
+    id        Int    @id @default(autoincrement())
+    nev       String
+    email     String
+    jelszo    String
     letrehozas DateTime
+    kedvencek kedvencek[] 
 }
+

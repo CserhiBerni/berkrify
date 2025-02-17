@@ -16,12 +16,14 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node"]  
   },
   "include": [
-    "src"
+    "src",
+    "prisma"  
   ],
   "exclude": [
-    "prisma"
+    "node_modules" 
   ]
 }
