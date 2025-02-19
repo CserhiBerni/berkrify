@@ -9,16 +9,16 @@ async function main() {
     const imageUrl = faker.image.url();
     const imageBuffer = Buffer.from(imageUrl, 'utf-8');
 
-    await prisma.zeneszamok.create({
+    await prisma.songs.create({
       data: {
         artist: faker.person.fullName(),
         album: faker.music.album(),
-        cim: faker.music.songName(),
-        hossz: faker.date.past(),
-        kiadas_ev: faker.number.int({ min: 1980, max: 2025 }),
-        mufaj: faker.music.genre(),
+        song: faker.music.songName(),
+        length: faker.date.past(),
+        release_yr: faker.number.int({ min: 1980, max: 2025 }),
+        genre: faker.music.genre(),
         mp3: mp3Buffer,  
-        boritokep: imageBuffer
+        cover: imageBuffer
       } as any 
     });
   }

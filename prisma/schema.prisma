@@ -13,38 +13,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model zeneszamok {
+model songs {
     id         Int    @id @default(autoincrement())
     artist     String
     album      String
-    cim        String
-    hossz      DateTime
-    kiadas_ev  Int
-    mufaj      String
+    song        String
+    length      DateTime
+    release_yr  Int
+    genre      String
     mp3        Bytes  
-    boritokep  Bytes? 
-    kedvencek  kedvencek[] 
+    cover  Bytes? 
+    favorites  favorites[] 
 }
 
-model mufaj {
+model genre {
     id    Int    @id @default(autoincrement())
-    mufaj String
+    genre String
 }
 
-model kedvencek {
+model favorites {
     id            Int @id @default(autoincrement())
-    felhasznalo_id Int
-    zene_id       Int
-    felhasznalo   felhasznalo @relation(fields: [felhasznalo_id], references: [id], onDelete: Cascade)
-    zene          zeneszamok @relation(fields: [zene_id], references: [id], onDelete: Cascade)
+    user_id Int
+    song_id       Int
+    user   user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    song          songs @relation(fields: [song_id], references: [id], onDelete: Cascade)
 }
 
-model felhasznalo {
+model user {
     id        Int    @id @default(autoincrement())
-    nev       String
+    name       String
     email     String
-    jelszo    String
-    letrehozas DateTime
-    kedvencek kedvencek[] 
+    password    String
+    created DateTime
+    favorites favorites[] 
 }
 
