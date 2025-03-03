@@ -1,9 +1,29 @@
+import * as argon2 from 'argon2';
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.user.createMany({
+    data: [
+      {
+        name: 'Admin bácsi',  
+        email: 'admin@example.com',
+        password: await argon2.hash('admin'),
+        created: new Date(),
+        role: 'Admin',  
+      },
+      {
+        name: 'User néni', 
+        email: 'user@example.com',
+        password: await argon2.hash('user'),
+        created: new Date(),
+        role: 'User',  
+      },
+    ],
+  });
+
   for (let i = 0; i < 10; i++) {
     const mp3Buffer = Buffer.from(faker.string.alphanumeric(100), 'utf-8');
     const imageUrl = faker.image.url();
@@ -17,18 +37,20 @@ async function main() {
         length: faker.date.past(),
         release_yr: faker.number.int({ min: 1980, max: 2025 }),
         genre: faker.music.genre(),
-        mp3: mp3Buffer,  
-        cover: imageBuffer
-      } as any 
+        mp3: mp3Buffer,
+        cover: imageBuffer,
+      },
     });
   }
 }
 
 main()
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
   });
+  
