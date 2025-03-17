@@ -5,7 +5,7 @@ import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { TiHomeOutline } from "react-icons/ti";
 import { MdOutlineLogout } from "react-icons/md";
-import Brand from "../../../public/genius-removebg-preview.png";
+import Brand from "../../../public/vinyl.png";
 import "./navbar.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -31,7 +31,10 @@ const Navbar = () => {
           <button className="navbar-toggler" type="button" onClick={handleShowNavbar}>
             <GiHamburgerMenu className="menu-icon" />
           </button>
-          <img src={Brand} className="brl" alt="brandlogo" />
+          <div className="brl-container">
+            <img src={Brand} className="brl" alt="brandlogo" />
+          </div>
+
         </div>
 
         <div className="navbar-center">

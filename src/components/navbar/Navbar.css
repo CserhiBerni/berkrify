@@ -12,7 +12,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  background-color: black;
+  background-color: rgba(56, 48, 98, 0.553);
   position: relative;
 }
 
@@ -66,16 +66,16 @@ body {
 .navbar-nav .nav-link {
   position: relative;
   text-decoration: none;
-  color: white;
+  color: black;
   padding-bottom: 0.2vh;
 }
 
 .navbar-nav .nav-link:hover {
-  color: #ff0080 !important;
+  color: rgb(92, 96, 133) !important;
 }
 
 .navbar-nav .nav-link.active {
-  color: white !important;
+  color: rgb(51, 40, 106) !important;
 }
 
 .navbar-nav .nav-link::after {
@@ -85,7 +85,7 @@ body {
   bottom: -3px;
   width: 30px;
   height: 3px;
-  background: linear-gradient(90deg, purple, orange);
+  background: linear-gradient(90deg, rgb(29, 2, 57), rgb(117, 86, 240));
   transform: translateX(-50%) scaleX(0);
   transition: transform 0.3s ease-in-out;
 }
@@ -111,7 +111,7 @@ body {
   border-radius: 50px;
   display: flex;
   align-items: center;
-  box-shadow: 0px 0px 10px rgba(255, 166, 0, 0.4);
+  box-shadow: 0px 0px 10px rgb(29, 2, 57);
   width: 50%;
   max-width: 600px;
   transition: all 0.3s ease-in-out;
@@ -138,7 +138,7 @@ body {
   border-radius: 0; 
   text-align: center;
   z-index: 1000;
-  box-shadow: 0px 5px 10px rgba(255, 166, 0, 0.4);
+  box-shadow: 0px 5px 10px rgb(29, 2, 57);
 }
 
 
@@ -162,7 +162,7 @@ body {
 }
 
 .mobile-menu .nav-link:hover {
-  background: linear-gradient(90deg, purple, orange);
+  background: linear-gradient(90deg, rgb(117, 86, 240), rgb(29, 2, 57));
 }
 
 
@@ -177,7 +177,7 @@ body {
 }
 
 .search-bar:focus-within {
-  box-shadow: 0px 0px 15px rgb(255, 166, 0), 0px 0px 40px rgb(128, 0, 128);
+  box-shadow: 0px 0px 15px rgb(117, 86, 240), 0px 0px 40px rgb(29, 2, 57);
 }
 
 @media (max-width: 768px) {
