@@ -45,12 +45,12 @@ body {
   height: 60px;
   max-width: 80px;
   max-height: 80px;
-  animation: rotate 30s linear infinite paused;
+  transition: transform 0.1s linear;
 }
 
+
 .brl:hover {
-  animation-play-state: running;
-}
+  animation-play-state: running;}
 
 @keyframes rotate {
   0% { transform: rotate(0deg); }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaSearch } from "react-icons/fa";
@@ -12,6 +12,24 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const Navbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  let animationFrameId: number = 0;
+
+  useEffect(() => {
+    const rotate = () => {
+      setRotation((prevRotation) => prevRotation + 2); 
+      animationFrameId = requestAnimationFrame(rotate);
+    };
+
+    if (isHovering) {
+      rotate();
+    } else {
+      cancelAnimationFrame(animationFrameId);
+    }
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isHovering]);
 
   const handleShowNavbar = () => {
     setShowNavbar(!showNavbar);
@@ -32,9 +50,16 @@ const Navbar = () => {
             <GiHamburgerMenu className="menu-icon" />
           </button>
           <div className="brl-container">
-            <img src={Brand} className="brl" alt="brandlogo" />
+            <img
+              src={Brand}
+              className="brl"
+              alt="brandlogo"
+              style={{ transform: `rotate(${rotation}deg)` }}
+              onMouseEnter={() => setIsHovering(true)} 
+              onMouseMove={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            />
           </div>
-
         </div>
 
         <div className="navbar-center">
@@ -65,13 +90,19 @@ const Navbar = () => {
       <div className="desktop-menu d-none d-md-flex">
         <ul className="navbar-nav mx-auto">
           <li className="nav-item">
-            <NavLink className="nav-link" to="/"><TiHomeOutline /></NavLink>
+            <NavLink className="nav-link" to="/">
+              <TiHomeOutline />
+            </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" to="/profile"><CgProfile /></NavLink>
+            <NavLink className="nav-link" to="/profile">
+              <CgProfile />
+            </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" to="/logout"><MdOutlineLogout /></NavLink>
+            <NavLink className="nav-link" to="/logout">
+              <MdOutlineLogout />
+            </NavLink>
           </li>
         </ul>
       </div>
