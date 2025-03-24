@@ -1,30 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSongDto } from './dto/create-song.dto';
-import { UpdateSongDto } from './dto/update-song.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { UpdateSongDto } from './dto/update-song.dto';
+import { CreateSongDto } from './dto/create-song.dto';
 
 @Injectable()
 export class SongsService {
+    constructor(private readonly prisma: PrismaService) {}
 
-  constructor(private readonly prismaService: PrismaService) { }
+    async create(createSongDto: CreateSongDto) {
+        return await this.prisma.songs.create({
+            data: createSongDto,
+        });
+    }
 
-  create(createSongDto: CreateSongDto) {
-    return 'This action adds a new song';
-  }
+    async findAll() {
+        return await this.prisma.songs.findMany();
+    }
 
-  findAll() {
-    return `This action returns all songs`;
-  }
+    async findOne(id: number) {
+        const song = await this.prisma.songs.findUnique({ where: { id } });
+        if (!song) throw new NotFoundException('The song cannot be found.');
+        return song;
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} song`;
-  }
+    update(id: number, updateSongDto: UpdateSongDto) {
+        return this.prisma.songs.update({
+            where: { id },
+            data: updateSongDto,
+        });
+    }
 
-  update(id: number, updateSongDto: UpdateSongDto) {
-    return `This action updates a #${id} song`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} song`;
-  }
+    remove(id: number) {
+        return this.prisma.songs.delete({ where: { id } });
+    }
 }

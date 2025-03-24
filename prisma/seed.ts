@@ -8,37 +8,33 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        name: 'Admin bácsi',  
+        name: 'Admin bácsi',
         email: 'admin@example.com',
         password: await argon2.hash('admin'),
         created: new Date(),
-        role: 'Admin',  
+        role: 'Admin',
       },
       {
-        name: 'User néni', 
+        name: 'User néni',
         email: 'user@example.com',
         password: await argon2.hash('user'),
         created: new Date(),
-        role: 'User',  
+        role: 'User',
       },
     ],
   });
 
-  for (let i = 0; i < 10; i++) {
-    const mp3Buffer = Buffer.from(faker.string.alphanumeric(100), 'utf-8');
-    const imageUrl = faker.image.url();
-    const imageBuffer = Buffer.from(imageUrl, 'utf-8');
-
+  for (let i = 0; i < 50; i++) {
     await prisma.songs.create({
       data: {
         artist: faker.person.fullName(),
         album: faker.music.album(),
         song: faker.music.songName(),
-        length: faker.date.past(),
+        length: faker.number.int({ min: 60, max: 380 }),
         release_yr: faker.number.int({ min: 1980, max: 2025 }),
         genre: faker.music.genre(),
-        mp3: mp3Buffer,
-        cover: imageBuffer,
+        mp3: faker.internet.url(), 
+        cover: faker.image.urlPicsumPhotos(),
       },
     });
   }
@@ -53,4 +49,4 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
-  
+

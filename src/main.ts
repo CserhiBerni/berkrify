@@ -21,6 +21,10 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
 
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads',
+  });
+
   const docConfig = new DocumentBuilder()
     .setTitle('Berkrify App')
     .addBearerAuth()

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty, IsDate, IsInt, IsOptional, IsDefined} from "class-validator";
+import { IsString, IsNotEmpty, IsInt, IsOptional } from "class-validator";
 
 export class CreateSongDto {
   @IsString()
@@ -7,55 +7,56 @@ export class CreateSongDto {
     example: 'Denzel Curry',
     description: 'The name of the artist'
   })
-  artist: string;
+  artist: string; 
 
   @IsString()
   @ApiProperty({
-    example: 'gnx',
+    example: 'Imperial',
     description: 'The name of the album'
   })
   album: string;
 
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    example: 'Fej és Vállak',
+    example: 'This Life',
     description: 'The name of the song'
   })
   song: string;
 
-  @IsDate()
-  @ApiProperty({
-    example: '2024-10-01 19:09:01.715',
-    description: 'The duration of the song and the date of its upload'
-  })
-  length: Date;
+  @IsInt()
+  @ApiProperty({ 
+    example: 207, 
+    description: 'The duration of the song in seconds'
+ })
+  length: number;
 
   @IsInt()
   @ApiProperty({
-    example: '2018',
-    description: 'The release date of the song'
+    example: 2016, 
+    description: 'The release year of the song' 
   })
   release_yr: number;
 
   @IsString()
   @ApiProperty({
-    example: 'r&b',
-    description: 'The genre of the song'
+    example: 'rap',
+    description: 'The genre of the song' 
   })
   genre: string;
 
-  @IsDefined()
-  @ApiProperty({
-    example: 'UklGRiIAAABXQVZFZm10IBAAAAABAAEARKwAABCx...',
-    description: 'Base64 encoded MP3 file data'
-  })
-  mp3: Buffer;
-  
   @IsOptional()
   @ApiProperty({
-    example: 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9h...',
-    description: 'Base64 encoded cover image file (optional)'
+    example: '/uploads/mp3/song.mp3',
+    description: 'Path to the MP3 file' 
   })
-  cover?: Buffer;
+  mp3: string;
+
+  @IsOptional()
+  @ApiProperty({
+   example: '/uploads/covers/image.png', 
+   description: 'Path to the cover image' 
+  })
+  cover: string;
 }

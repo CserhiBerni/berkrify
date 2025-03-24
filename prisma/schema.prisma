@@ -18,11 +18,11 @@ model songs {
     artist     String
     album      String
     song        String
-    length      DateTime
+    length      Int
     release_yr  Int
     genre      String
-    mp3        Bytes  
-    cover  Bytes? 
+    mp3        String  
+    cover  String
     favorites  favorites[] 
 }
 
