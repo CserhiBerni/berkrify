@@ -1,0 +1,105 @@
+.music-list-container {
+    position: relative;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    cursor: grab;
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+ 
+.music-row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 0;
+    width: 100px;
+    opacity: 50%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 5;
+}
+ 
+.music-list-container::-webkit-scrollbar {
+    display: none;
+}
+ 
+.music-list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+ 
+.music-card {
+    min-width: 250px;
+    max-width: 250px;
+    flex: 0 0 auto;
+    user-select: none;
+}
+ 
+.grabbable {
+    cursor: grab;
+}
+ 
+.grabbing {
+    cursor: grabbing;
+}
+ 
+.music-list-end-space {
+    min-width: 20px;
+    flex-shrink: 0;  
+}
+ 
+.scroll-to-start-btn {
+    position: absolute;
+    left: 85px;
+    bottom: 40%;
+    transform: translateY(50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease-in-out, transform 0.3s ease-in-out;
+    transform: scale(0.8);
+}
+ 
+.scroll-to-start-btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+ 
+.music-row {
+    position: relative;
+}
+ 
+.scroll-icon .arrow-path {
+    fill: black;
+    transition: fill 0.3s ease-in-out;
+}
+ 
+.scroll-to-start-btn:hover .scroll-icon .arrow-path {
+    fill: url(#grad1);
+}
+ 
+@media (max-width: 768px) {
+    .music-list-container {
+        justify-content: flex-start;
+        padding-left: 10px;
+    }
+ 
+    .music-card {
+        min-width: 67vw;
+        margin-left: 13vw;
+        margin-right: 7vw;
+    }
+}
