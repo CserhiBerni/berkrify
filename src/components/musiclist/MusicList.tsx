@@ -2,65 +2,67 @@ import { useEffect, useState, useRef } from "react";
 import { getSongs } from "../services/service/songService";
 import { Song } from "../services/class/types";
 import MusicCard from "../musiccard/MusicCard";
+import MusicPlayer from "../musicplayer/MusicPlayer";
 import "./MusicList.css";
- 
+
 const NUM_ROWS = 4;
- 
+
 const MusicList: React.FC = () => {
     const [songs, setSongs] = useState<Song[]>([]);
+    const [currentSong, setCurrentSong] = useState<Song | null>(songs[0]);
     const scrollRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [showScrollButtons, setShowScrollButtons] = useState<boolean[]>([]);
- 
+
     useEffect(() => {
         const fetchSongs = async () => {
             const data = await getSongs();
             setSongs(data);
         };
- 
+
         fetchSongs();
     }, []);
- 
+
     const groupedSongs = Array.from({ length: NUM_ROWS }, () => [] as Song[]);
     songs.forEach((song, index) => {
         groupedSongs[index % NUM_ROWS].push(song);
     });
- 
+
     const handleScroll = (rowIndex: number) => {
         const container = scrollRefs.current[rowIndex];
         if (!container) return;
- 
+
         setShowScrollButtons((prev) => {
             const newState = [...prev];
             newState[rowIndex] = container.scrollLeft > 20;
             return newState;
         });
     };
- 
+
     useEffect(() => {
         const enableDragScroll = (container: HTMLDivElement | null) => {
             if (!container) return;
- 
+
             let isDown = false;
             let startX: number;
             let scrollLeft: number;
- 
+
             container.addEventListener("mousedown", (e) => {
                 isDown = true;
                 startX = e.pageX - container.offsetLeft;
                 scrollLeft = container.scrollLeft;
                 container.classList.add("grabbing");
             });
- 
+
             container.addEventListener("mouseleave", () => {
                 isDown = false;
                 container.classList.remove("grabbing");
             });
- 
+
             container.addEventListener("mouseup", () => {
                 isDown = false;
                 container.classList.remove("grabbing");
             });
- 
+
             container.addEventListener("mousemove", (e) => {
                 if (!isDown) return;
                 e.preventDefault();
@@ -69,16 +71,16 @@ const MusicList: React.FC = () => {
                 container.scrollLeft = scrollLeft - walk;
             });
         };
- 
+
         scrollRefs.current.forEach(enableDragScroll);
     }, [songs.length]);
- 
+
     const scrollToStart = (rowIndex: number) => {
         if (scrollRefs.current[rowIndex]) {
             scrollRefs.current[rowIndex]?.scrollTo({ left: 0, behavior: "smooth" });
         }
     };
- 
+
     return (
         <div className="music-list-wrapper">
             {groupedSongs.map((rowSongs, rowIndex) => (
@@ -92,12 +94,12 @@ const MusicList: React.FC = () => {
                     >
                         <div className="music-list">
                             {rowSongs.map((song) => (
-                                <MusicCard key={song.id} song={song} onPlay={() => {}} />
+                                <MusicCard key={song.id} song={song} onPlay={() => setCurrentSong(song)} />
                             ))}
                             <div className="music-list-end-space"></div>
                         </div>
                     </div>
- 
+
                     {showScrollButtons[rowIndex] && (
                         <button className="scroll-to-start-btn show" onClick={() => scrollToStart(rowIndex)}>
                             <svg className="scroll-icon" width="50" height="50" viewBox="0 0 24 24" fill="black">
@@ -116,8 +118,14 @@ const MusicList: React.FC = () => {
                     )}
                 </div>
             ))}
+            {currentSong && (
+                <div className="music-player-container">
+                    <MusicPlayer song={currentSong} songs={songs} onSongChange={(newSong: Song) => setCurrentSong(newSong)} />
+                </div>
+            )}
+
         </div>
     );
 };
- 
+
 export default MusicList;
