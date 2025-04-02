@@ -41,7 +41,10 @@ public class AdminDashboard extends Application {
     tableView.setItems(songs);
     loadRecords();
 
-    VBox vbox = new VBox(tableView);
+    Button deleteButton = new Button("Delete");
+    deleteButton.setOnAction(e -> deleteSelectedRecord());
+
+    VBox vbox = new VBox(tableView, deleteButton);
     Scene scene = new Scene(vbox, 650, 400);
     stage.setScene(scene);
     stage.setTitle("Admin Dashboard");
@@ -65,6 +68,22 @@ public class AdminDashboard extends Application {
       }
     } catch (SQLException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void deleteSelectedRecord() {
+    Song selected = tableView.getSelectionModel().getSelectedItem();
+    if (selected != null) {
+      try (Connection conn = DatabaseConnection.getConnection()) {
+        assert conn != null;
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM songs WHERE id = ?")) {
+          ps.setInt(1, selected.getId());
+          ps.executeUpdate();
+          songs.remove(selected);
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
 }
