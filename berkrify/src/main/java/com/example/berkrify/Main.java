@@ -11,7 +11,7 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) {
     try {
-      URL fxmlLocation = getClass().getResource("/com/example/berkrify/login.fxml");
+      URL fxmlLocation = getClass().getResource("/com/example/berkrify/fxml/login.fxml");
 
       if (fxmlLocation == null) {
         throw new RuntimeException("FXML file not found! Check the path.");

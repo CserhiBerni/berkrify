@@ -1,4 +1,4 @@
-package com.example.berkrify.application;
+package com.example.berkrify.views;
 
 import com.example.berkrify.database.DatabaseConnection;
 import com.example.berkrify.models.Song;
@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AdminDashboard extends Application {
+public class SongDashboard extends Application {
   private final TableView<Song> tableView = new TableView<>();
   private final ObservableList<Song> songs = FXCollections.observableArrayList();
 
@@ -47,7 +47,7 @@ public class AdminDashboard extends Application {
     VBox vbox = new VBox(tableView, deleteButton);
     Scene scene = new Scene(vbox, 650, 400);
     stage.setScene(scene);
-    stage.setTitle("Admin Dashboard");
+    stage.setTitle("Song Dashboard for admins");
     stage.show();
   }
 

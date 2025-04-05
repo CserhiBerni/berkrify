@@ -1,6 +1,6 @@
 package com.example.berkrify.controllers;
 
-import com.example.berkrify.application.AdminDashboard;
+import com.example.berkrify.views.SongDashboard;
 import com.example.berkrify.database.DatabaseConnection;
 import com.example.berkrify.security.PasswordHasher;
 import javafx.fxml.FXML;
@@ -21,11 +21,6 @@ public class LoginController {
     String email = emailField.getText();
     String password = passwordField.getText();
 
-    if (email.equals("admin") && password.equals("admin")) {
-      messageLabel.setText("Temporary login successful!");
-      openAdminDashboard();
-    }
-
     if (validateLogin(email, password)) {
       messageLabel.setText("Login successful!");
       openAdminDashboard();
@@ -35,23 +30,23 @@ public class LoginController {
   }
 
   private boolean validateLogin(String email, String password) {
-    String sql = "SELECT role, password FROM user WHERE email = ? AND password = ?";
+    String sql = "SELECT role, password FROM user WHERE email = ?";
 
     try (Connection conn = DatabaseConnection.getConnection()) {
       assert conn != null;
       try (PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, email);
-        ps.setString(2, password);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
           String role = rs.getString("role");
-          return "Admin".equals(role);
-        }
+          String storedHash = rs.getString("password");
 
-        if (rs.next()) {
-          String hashedPassword = rs.getString("password");
-          return PasswordHasher.verifyPassword(password, hashedPassword);
+          if (!"Admin".equalsIgnoreCase(role)) {
+            return false;
+          }
+
+          return PasswordHasher.verifyPassword(password, storedHash);
         }
       }
     } catch (SQLException e) {
@@ -65,8 +60,8 @@ public class LoginController {
       Stage stage = (Stage) emailField.getScene().getWindow();
       stage.close();
 
-      AdminDashboard adminDashboard = new AdminDashboard();
-      adminDashboard.start(new Stage());
+      SongDashboard songDashboard = new SongDashboard();
+      songDashboard.start(new Stage());
     } catch (Exception e) {
       e.printStackTrace();
     }
