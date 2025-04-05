@@ -3,6 +3,7 @@ package com.example.berkrify.controllers;
 import com.example.berkrify.database.DatabaseConnection;
 import com.example.berkrify.security.PasswordHasher;
 import com.example.berkrify.security.SecurityService;
+import com.example.berkrify.security.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,9 +16,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginController {
-  @FXML private TextField emailField;
-  @FXML private PasswordField passwordField;
-  @FXML private Label messageLabel;
+  @FXML
+  private TextField emailField;
+  @FXML
+  private PasswordField passwordField;
+  @FXML
+  private Label messageLabel;
 
   private SecurityService securityService;
 
@@ -33,33 +37,40 @@ public class LoginController {
       messageLabel.setText("Login successful!");
       openAdminDashboard();
     } else {
-      messageLabel.setText("Access Denied! Only Admins can log in.");
+      messageLabel.setText("Access Denied! You don't have " +
+          "permission or given a wrong password.");
     }
   }
 
   private boolean validateLogin(String email, String password) {
-    String sql = "SELECT role, password FROM user WHERE email = ?";
+    String sql = "SELECT id, role, password FROM user WHERE email = ?";
 
     try (Connection conn = DatabaseConnection.getConnection()) {
       assert conn != null;
       try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
         ps.setString(1, email);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
+          int userId = rs.getInt("id");
           String role = rs.getString("role");
           String storedHash = rs.getString("password");
 
-          return securityService.verifyPassword(password, storedHash) &&
+          boolean ok = securityService.verifyPassword(password, storedHash) &&
               securityService.verifyRole(role);
+
+          if (ok) {
+            Session.getInstance().setUser(userId, email, role);
+            return true;
+          }
         }
       }
     } catch (SQLException e) {
-      e.printStackTrace();
+      messageLabel.setText("Could not communicate with database.");
     }
     return false;
   }
+
 
   private void openAdminDashboard() {
     try {

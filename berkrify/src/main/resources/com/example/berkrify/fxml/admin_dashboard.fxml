@@ -9,5 +9,6 @@
 
     <Button text="Manage Songs" onAction="#handleSongs" />
     <Button text="Manage Users" onAction="#handleUsers" />
+    <Button text="Logout" onAction="#handleLogout" />
 
 </VBox>

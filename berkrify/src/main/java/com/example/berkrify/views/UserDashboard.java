@@ -4,6 +4,7 @@ import com.example.berkrify.controllers.SongController;
 import com.example.berkrify.controllers.UserController;
 import com.example.berkrify.models.Song;
 import com.example.berkrify.models.User;
+import com.example.berkrify.security.Session;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -62,6 +63,11 @@ public class UserDashboard extends Application {
   private void deleteSelectedRecord() {
     User selected = tableView.getSelectionModel().getSelectedItem();
     if (selected != null) {
+      if (selected.getId() == Session.getInstance().getUserId()) {
+        showAlert("Permission Denied", "You cannot delete your own account.");
+        return;
+      }
+
       if (userController.deleteUsers(selected)) {
         tableView.getItems().remove(selected);
       } else {
