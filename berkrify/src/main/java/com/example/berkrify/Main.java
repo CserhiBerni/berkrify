@@ -18,7 +18,7 @@ public class Main extends Application {
       }
 
       FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
-      Scene scene = new Scene(fxmlLoader.load(), 400, 300);
+      Scene scene = new Scene(fxmlLoader.load(), 650, 400);
       stage.setTitle("Admin Login");
       stage.setScene(scene);
       stage.show();
@@ -26,7 +26,6 @@ public class Main extends Application {
       e.printStackTrace();
     }
   }
-
 
   public static void main(String[] args) {
     launch(args);

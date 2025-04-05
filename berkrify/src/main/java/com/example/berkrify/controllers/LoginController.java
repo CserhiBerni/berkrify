@@ -1,9 +1,10 @@
 package com.example.berkrify.controllers;
 
-import com.example.berkrify.views.SongDashboard;
 import com.example.berkrify.database.DatabaseConnection;
 import com.example.berkrify.security.PasswordHasher;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -60,8 +61,13 @@ public class LoginController {
       Stage stage = (Stage) emailField.getScene().getWindow();
       stage.close();
 
-      SongDashboard songDashboard = new SongDashboard();
-      songDashboard.start(new Stage());
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/fxml/admin_dashboard.fxml"));
+      Scene scene = new Scene(loader.load(), 650, 400);
+      Stage newStage = new Stage();
+      newStage.setScene(scene);
+      newStage.setTitle("Admin Dashboard");
+      newStage.show();
+
     } catch (Exception e) {
       e.printStackTrace();
     }
