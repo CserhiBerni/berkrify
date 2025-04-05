@@ -1,25 +1,22 @@
 package com.example.berkrify.views;
 
-import com.example.berkrify.database.DatabaseConnection;
+import com.example.berkrify.controllers.SongController;
+import com.example.berkrify.controllers.UserController;
+import com.example.berkrify.models.Song;
 import com.example.berkrify.models.User;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class UserDashboard extends Application {
   private final TableView<User> tableView = new TableView<>();
-  private final ObservableList<User> users = FXCollections.observableArrayList();
+  private final UserController userController = new UserController();
 
   public static void main(String[] args) {
     launch(args);
@@ -27,20 +24,20 @@ public class UserDashboard extends Application {
 
   @Override
   public void start(Stage stage) {
-    TableColumn<User, Integer> idColumn = new TableColumn<>("id");
+    TableColumn<User, Integer> idColumn = new TableColumn<>("ID");
     idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 
-    TableColumn<User, String> nameColumn = new TableColumn<>("name");
+    TableColumn<User, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
-    TableColumn<User, String> emailColumn = new TableColumn<>("email");
+    TableColumn<User, String> emailColumn = new TableColumn<>("Email");
     emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
 
-    TableColumn<User, String> createdColumn = new TableColumn<>("created");
+    TableColumn<User, String> createdColumn = new TableColumn<>("Created");
     createdColumn.setCellValueFactory(cellData -> cellData.getValue().createdProperty());
 
     tableView.getColumns().addAll(idColumn, nameColumn, emailColumn, createdColumn);
-    tableView.setItems(users);
+
     loadRecords();
 
     Button deleteButton = new Button("Delete");
@@ -54,38 +51,29 @@ public class UserDashboard extends Application {
   }
 
   private void loadRecords() {
-    users.clear();
-    try (Connection conn = DatabaseConnection.getConnection()) {
-      assert conn != null;
-      try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
-           ResultSet rs = stmt.executeQuery()) {
-        while (rs.next()) {
-          users.add(new User(
-              rs.getInt("id"),
-              rs.getString("name"),
-              rs.getString("email"),
-              rs.getString("created")
-          ));
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
+    ObservableList<User> users = userController.loadUsers();
+    if (users.isEmpty()) {
+      showAlert("Empty list", "There are currently no users.");
+    } else {
+      tableView.setItems(users);
     }
   }
 
   private void deleteSelectedRecord() {
     User selected = tableView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      try (Connection conn = DatabaseConnection.getConnection()) {
-        assert conn != null;
-        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM user WHERE id = ?")) {
-          ps.setInt(1, selected.getId());
-          ps.executeUpdate();
-          users.remove(selected);
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
+      if (userController.deleteUsers(selected)) {
+        tableView.getItems().remove(selected);
+      } else {
+        showAlert("Deletion Error", "Could not delete the selected user.");
       }
     }
+  }
+
+  private void showAlert(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(title);
+    alert.setContentText(message);
+    alert.showAndWait();
   }
 }

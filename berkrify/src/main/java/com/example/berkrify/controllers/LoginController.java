@@ -2,6 +2,7 @@ package com.example.berkrify.controllers;
 
 import com.example.berkrify.database.DatabaseConnection;
 import com.example.berkrify.security.PasswordHasher;
+import com.example.berkrify.security.SecurityService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +18,12 @@ public class LoginController {
   @FXML private TextField emailField;
   @FXML private PasswordField passwordField;
   @FXML private Label messageLabel;
+
+  private SecurityService securityService;
+
+  public LoginController() {
+    this.securityService = new SecurityService();
+  }
 
   public void handleLogin() {
     String email = emailField.getText();
@@ -36,6 +43,7 @@ public class LoginController {
     try (Connection conn = DatabaseConnection.getConnection()) {
       assert conn != null;
       try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
         ps.setString(1, email);
         ResultSet rs = ps.executeQuery();
 
@@ -43,11 +51,8 @@ public class LoginController {
           String role = rs.getString("role");
           String storedHash = rs.getString("password");
 
-          if (!"Admin".equalsIgnoreCase(role)) {
-            return false;
-          }
-
-          return PasswordHasher.verifyPassword(password, storedHash);
+          return securityService.verifyPassword(password, storedHash) &&
+              securityService.verifyRole(role);
         }
       }
     } catch (SQLException e) {
