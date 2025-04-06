@@ -2,25 +2,36 @@ package com.example.berkrify.views;
 
 import com.example.berkrify.controllers.SongController;
 import com.example.berkrify.models.Song;
-import com.example.berkrify.models.User;
-import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 
-public class SongDashboard extends Application {
+public class SongDashboard {
 
-  private final TableView<Song> tableView = new TableView<>();
   private final SongController songController = new SongController();
+  private TableView<Song> tableView;
 
-  public static void main(String[] args) {
-    launch(args);
-  }
+  public Parent getView() {
+    Button backButton = new Button("Back");
+    backButton.setOnAction(e -> {
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/fxml/admin_dashboard.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        stage.setScene(new javafx.scene.Scene(root, 650, 400));
+        stage.setTitle("Admin Dashboard");
+        stage.show();
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    });
 
-  @Override
-  public void start(Stage stage) {
+    tableView = new TableView<>();
     TableColumn<Song, Integer> idColumn = new TableColumn<>("ID");
     idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 
@@ -34,17 +45,14 @@ public class SongDashboard extends Application {
     albumColumn.setCellValueFactory(cellData -> cellData.getValue().albumProperty());
 
     tableView.getColumns().addAll(idColumn, titleColumn, artistColumn, albumColumn);
-
     loadRecords();
 
     Button deleteButton = new Button("Delete");
     deleteButton.setOnAction(e -> deleteSelectedRecord());
 
-    VBox vbox = new VBox(tableView, deleteButton);
-    Scene scene = new Scene(vbox, 650, 400);
-    stage.setScene(scene);
-    stage.setTitle("Song Dashboard for Admins");
-    stage.show();
+    VBox vbox = new VBox(10, backButton, tableView, deleteButton);
+    vbox.setPadding(new Insets(10));
+    return vbox;
   }
 
   private void loadRecords() {

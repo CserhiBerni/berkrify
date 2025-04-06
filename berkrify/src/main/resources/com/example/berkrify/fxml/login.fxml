@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.berkrify.controllers.LoginController">
-    <Label text="Admin Login" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
-    <TextField fx:id="emailField" promptText="Email" />
-    <PasswordField fx:id="passwordField" promptText="Password" />
-    <Button text="Login" onAction="#handleLogin"/>
-    <Label fx:id="messageLabel" textFill="red"/>
+<VBox spacing="15" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/8"
+      fx:controller="com.example.berkrify.controllers.LoginController">
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+    <Label text="Admin Login" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <TextField fx:id="emailField" promptText="Email" maxWidth="250"/>
+    <PasswordField fx:id="passwordField" promptText="Password" maxWidth="250"/>
+    <Button text="Login" onAction="#handleLogin" maxWidth="120"/>
+    <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
 </VBox>

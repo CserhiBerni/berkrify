@@ -6,6 +6,7 @@ import com.example.berkrify.views.UserDashboard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -13,7 +14,12 @@ public class AdminDashboardController {
 
   public void handleSongs(ActionEvent event) {
     try {
-      new SongDashboard().start(new Stage());
+      SongDashboard songDashboard = new SongDashboard();
+      Parent root = songDashboard.getView();
+      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+      stage.setScene(new Scene(root, 650, 400));
+      stage.setTitle("Song Dashboard");
+      stage.show();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -21,7 +27,12 @@ public class AdminDashboardController {
 
   public void handleUsers(ActionEvent event) {
     try {
-      new UserDashboard().start(new Stage());
+      UserDashboard userDashboard = new UserDashboard();
+      Parent root = userDashboard.getView();
+      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+      stage.setScene(new Scene(root, 650, 400));
+      stage.setTitle("User Dashboard");
+      stage.show();
     } catch (Exception e) {
       e.printStackTrace();
     }

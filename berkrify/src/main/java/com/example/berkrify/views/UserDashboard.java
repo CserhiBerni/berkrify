@@ -1,30 +1,38 @@
 package com.example.berkrify.views;
 
-import com.example.berkrify.controllers.SongController;
 import com.example.berkrify.controllers.UserController;
-import com.example.berkrify.models.Song;
 import com.example.berkrify.models.User;
 import com.example.berkrify.security.Session;
-import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 
-public class UserDashboard extends Application {
-  private final TableView<User> tableView = new TableView<>();
+public class UserDashboard {
+
   private final UserController userController = new UserController();
+  private TableView<User> tableView;
 
-  public static void main(String[] args) {
-    launch(args);
-  }
+  public Parent getView() {
+    Button backButton = new Button("← Back");
+    backButton.setOnAction(e -> {
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/fxml/admin_dashboard.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        stage.setScene(new javafx.scene.Scene(root, 650, 400));
+        stage.setTitle("Admin Dashboard");
+        stage.show();
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    });
 
-  @Override
-  public void start(Stage stage) {
+    tableView = new TableView<>();
     TableColumn<User, Integer> idColumn = new TableColumn<>("ID");
     idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 
@@ -38,17 +46,14 @@ public class UserDashboard extends Application {
     createdColumn.setCellValueFactory(cellData -> cellData.getValue().createdProperty());
 
     tableView.getColumns().addAll(idColumn, nameColumn, emailColumn, createdColumn);
-
     loadRecords();
 
     Button deleteButton = new Button("Delete");
     deleteButton.setOnAction(e -> deleteSelectedRecord());
 
-    VBox vbox = new VBox(tableView, deleteButton);
-    Scene scene = new Scene(vbox, 650, 400);
-    stage.setScene(scene);
-    stage.setTitle("User Dashboard for admins");
-    stage.show();
+    VBox vbox = new VBox(10, backButton, tableView, deleteButton);
+    vbox.setPadding(new Insets(10));
+    return vbox;
   }
 
   private void loadRecords() {

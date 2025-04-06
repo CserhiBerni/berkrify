@@ -6,6 +6,7 @@ import com.example.berkrify.security.SecurityService;
 import com.example.berkrify.security.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -78,11 +79,11 @@ public class LoginController {
       stage.close();
 
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/fxml/admin_dashboard.fxml"));
-      Scene scene = new Scene(loader.load(), 650, 400);
-      Stage newStage = new Stage();
-      newStage.setScene(scene);
-      newStage.setTitle("Admin Dashboard");
-      newStage.show();
+      Parent root = loader.load();
+      Stage currentStage = (Stage) emailField.getScene().getWindow();
+      currentStage.setScene(new Scene(root, 650, 400));
+      currentStage.setTitle("Admin Dashboard");
+      currentStage.show();
 
     } catch (Exception e) {
       e.printStackTrace();
