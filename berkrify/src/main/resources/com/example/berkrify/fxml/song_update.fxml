@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.berkrify.controllers.SongUpdateController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Update Song" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="titleField" promptText="Title" maxWidth="250"/>
+    <TextField fx:id="artistField" promptText="Artist" maxWidth="250"/>
+    <TextField fx:id="albumField" promptText="Album" maxWidth="250"/>
+
+    <Button text="Update" onAction="#handleUpdate"/>
+    <Button text="Cancel" onAction="#handleCancel"/>
+</VBox>

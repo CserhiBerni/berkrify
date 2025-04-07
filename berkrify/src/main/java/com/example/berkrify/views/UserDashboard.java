@@ -78,6 +78,8 @@ public class UserDashboard {
       } else {
         showAlert("Deletion Error", "Could not delete the selected user.");
       }
+    } else {
+      showAlert("Selection Error", "Please select a user to delete.");
     }
   }
 

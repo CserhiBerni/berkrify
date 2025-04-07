@@ -1,10 +1,12 @@
 package com.example.berkrify.views;
 
 import com.example.berkrify.controllers.SongController;
+import com.example.berkrify.controllers.SongUpdateController;
 import com.example.berkrify.models.Song;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
@@ -50,7 +52,10 @@ public class SongDashboard {
     Button deleteButton = new Button("Delete");
     deleteButton.setOnAction(e -> deleteSelectedRecord());
 
-    VBox vbox = new VBox(10, backButton, tableView, deleteButton);
+    Button modifyButton = new Button("Modify");
+    modifyButton.setOnAction(e -> modifySelectedRecord());
+
+    VBox vbox = new VBox(10, backButton, tableView, deleteButton, modifyButton);
     vbox.setPadding(new Insets(10));
     return vbox;
   }
@@ -72,6 +77,33 @@ public class SongDashboard {
       } else {
         showAlert("Deletion Error", "Could not delete the selected song.");
       }
+    } else {
+      showAlert("Selection Error", "Please select a song to delete.");
+    }
+  }
+
+  private void modifySelectedRecord() {
+    Song selected = tableView.getSelectionModel().getSelectedItem();
+    if (selected == null) {
+      showAlert("Selection Error", "Please select a song to update.");
+      return;
+    }
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/fxml/song_update.fxml"));
+      Parent root = loader.load();
+
+      SongUpdateController controller = loader.getController();
+      controller.setSong(selected);
+
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root, 400, 300));
+      stage.setTitle("Update Song");
+      stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+      stage.showAndWait();
+
+      loadRecords();
+    } catch (Exception ex) {
+      ex.printStackTrace();
     }
   }
 

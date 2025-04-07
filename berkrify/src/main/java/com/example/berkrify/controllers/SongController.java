@@ -51,4 +51,22 @@ public class SongController {
     }
     return false;
   }
+
+  public boolean updateSong(int id, String newTitle, String newArtist, String newAlbum) {
+    String sql = "UPDATE songs SET song = ?, artist = ?, album = ? WHERE id = ?";
+    try (Connection conn = DatabaseConnection.getConnection()) {
+      assert conn != null;
+      try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, newTitle);
+        ps.setString(2, newArtist);
+        ps.setString(3, newAlbum);
+        ps.setInt(4, id);
+        int affectedRows = ps.executeUpdate();
+        return affectedRows > 0;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
 }
