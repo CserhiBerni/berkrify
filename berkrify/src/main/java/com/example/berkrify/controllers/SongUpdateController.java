@@ -11,6 +11,8 @@ public class SongUpdateController {
   @FXML private TextField titleField;
   @FXML private TextField artistField;
   @FXML private TextField albumField;
+  @FXML private TextField mp3Field;
+  @FXML private TextField coverField;
 
   private Song song;
   private final SongController songController = new SongController();
@@ -20,6 +22,8 @@ public class SongUpdateController {
     titleField.setText(song.getTitle());
     artistField.setText(song.getArtist());
     albumField.setText(song.getAlbum());
+    mp3Field.setText(song.getMp3());
+    coverField.setText(song.getCover());
   }
 
   @FXML
@@ -27,8 +31,10 @@ public class SongUpdateController {
     String newTitle = titleField.getText();
     String newArtist = artistField.getText();
     String newAlbum = albumField.getText();
+    String newMp3 = mp3Field.getText();
+    String newCover = coverField.getText();
 
-    boolean success = songController.updateSong(song.getId(), newTitle, newArtist, newAlbum);
+    boolean success = songController.updateSong(song.getId(), newTitle, newArtist, newAlbum, newMp3, newCover);
     if (success) {
       showAlert("Success", "Song updated successfully.");
       closeWindow();

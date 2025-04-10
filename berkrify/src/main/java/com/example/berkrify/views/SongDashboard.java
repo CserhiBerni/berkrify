@@ -47,7 +47,13 @@ public class SongDashboard {
     TableColumn<Song, String> albumColumn = new TableColumn<>("Album");
     albumColumn.setCellValueFactory(cellData -> cellData.getValue().albumProperty());
 
-    tableView.getColumns().addAll(idColumn, titleColumn, artistColumn, albumColumn);
+    TableColumn<Song, String> mp3Column = new TableColumn<>("MP3");
+    mp3Column.setCellValueFactory(cellData -> cellData.getValue().mp3Property());
+
+    TableColumn<Song, String> coverColumn = new TableColumn<>("Cover");
+    coverColumn.setCellValueFactory(cellData -> cellData.getValue().coverProperty());
+
+    tableView.getColumns().addAll(idColumn, titleColumn, artistColumn, albumColumn, mp3Column, coverColumn);
     loadRecords();
 
     Button deleteButton = new Button("Delete");

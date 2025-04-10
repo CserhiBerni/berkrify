@@ -14,6 +14,8 @@
     <TextField fx:id="titleField" promptText="Title" maxWidth="250"/>
     <TextField fx:id="artistField" promptText="Artist" maxWidth="250"/>
     <TextField fx:id="albumField" promptText="Album" maxWidth="250"/>
+    <TextField fx:id="mp3Field" promptText="MP3" maxWidth="250"/>
+    <TextField fx:id="coverField" promptText="Cover" maxWidth="250"/>
 
     <Button text="Update" onAction="#handleUpdate"/>
     <Button text="Cancel" onAction="#handleCancel"/>

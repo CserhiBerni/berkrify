@@ -3,6 +3,7 @@ package com.example.berkrify.views;
 import com.example.berkrify.controllers.UserController;
 import com.example.berkrify.models.User;
 import com.example.berkrify.security.Session;
+import com.example.berkrify.util.CSVExporter;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -51,7 +52,12 @@ public class UserDashboard {
     Button deleteButton = new Button("Delete");
     deleteButton.setOnAction(e -> deleteSelectedRecord());
 
-    VBox vbox = new VBox(10, backButton, tableView, deleteButton);
+    Button exportButton = new Button("Export data");
+    exportButton.setOnAction(e -> {
+      CSVExporter.exportUserToCSV(tableView.getItems(), exportButton.getScene().getWindow());
+    });
+
+    VBox vbox = new VBox(10, backButton, tableView, deleteButton, exportButton);
     vbox.setPadding(new Insets(10));
     return vbox;
   }
