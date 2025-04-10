@@ -6,8 +6,10 @@ import com.example.berkrify.security.Session;
 import com.example.berkrify.util.CSVExporter;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.stage.Stage;
@@ -57,7 +59,9 @@ public class UserDashboard {
       CSVExporter.exportUserToCSV(tableView.getItems(), exportButton.getScene().getWindow());
     });
 
-    VBox vbox = new VBox(10, backButton, tableView, deleteButton, exportButton);
+    HBox buttonBar = new HBox(10, deleteButton, exportButton);
+    buttonBar.setAlignment(Pos.CENTER);
+    VBox vbox = new VBox(10, backButton, tableView, buttonBar);
     vbox.setPadding(new Insets(10));
     return vbox;
   }

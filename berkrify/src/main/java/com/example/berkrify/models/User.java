@@ -7,13 +7,17 @@ public class User {
   private final SimpleIntegerProperty id;
   private final SimpleStringProperty name;
   private final SimpleStringProperty email;
+  private final SimpleStringProperty password;
   private final SimpleStringProperty created;
+  private final SimpleStringProperty role;
 
-  public User(int id, String name, String email, String created) {
+  public User(int id, String name, String email, String password, String created, String role) {
     this.id = new SimpleIntegerProperty(id);
     this.name = new SimpleStringProperty(name);
     this.email = new SimpleStringProperty(email);
+    this.password = new SimpleStringProperty(password);
     this.created = new SimpleStringProperty(created);
+    this.role = new SimpleStringProperty(role);
   }
 
   public int getId() {
@@ -40,11 +44,27 @@ public class User {
     return email;
   }
 
+  public String getPassword() {
+    return password.get();
+  }
+
+  public SimpleStringProperty passwordProperty() {
+    return password;
+  }
+
   public String getCreated() {
     return created.get();
   }
 
   public SimpleStringProperty createdProperty() {
     return created;
+  }
+
+  public String getRole() {
+    return role.get();
+  }
+
+  public SimpleStringProperty roleProperty() {
+    return role;
   }
 }
