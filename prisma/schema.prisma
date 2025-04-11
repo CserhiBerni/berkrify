@@ -23,7 +23,12 @@ model songs {
     genre      String
     mp3        String  
     cover  String
-    favorites  favorites[] 
+    play_count  Int          @default(0)
+    last_played DateTime?
+    created_at  DateTime     @default(now())
+    favorites   favorites[] 
+    playlist_songs PlaylistSong[]
+    play_history PlayHistory[] 
 }
 
 model genre {
@@ -44,10 +49,46 @@ model user {
     name       String
     email     String @unique
     password    String
+    profilePicture  String? 
     created DateTime
     favorites favorites[] 
     role Role
     tokens Token[]
+    playlists  Playlist[]
+    play_history PlayHistory[]
+}
+
+model Playlist {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String?
+  coverImagePath String?
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  user_id     Int
+  user        user          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  songs       PlaylistSong[]
+
+  @@unique([user_id, name])
+}
+
+model PlaylistSong {
+  id          Int       @id @default(autoincrement())
+  playlist_id Int
+  song_id     Int
+  added_at    DateTime  @default(now())
+  position    Int
+  playlist    Playlist  @relation(fields: [playlist_id], references: [id], onDelete: Cascade)
+  song        songs     @relation(fields: [song_id], references: [id], onDelete: Cascade)
+}
+
+model PlayHistory {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  song_id   Int
+  played_at DateTime @default(now())
+  user      user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  song      songs    @relation(fields: [song_id], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -59,6 +100,7 @@ model Token {
   token   String @id
   user    user   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
+  expires DateTime
 }
 
 

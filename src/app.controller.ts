@@ -18,12 +18,9 @@ export class AppController {
   }
 
   @Post('newSong')
-  // Definiáljuk, hogy a newSong végpontot milyen szerepkörökkel lehet elérni
   @Roles(Role.Admin, Role.User)
-  // Mindkét Guard kell a működéshez!
   @UseGuards(AuthGuard('bearer'), RolesGuard)
   newSong() {
-    // Új zenét hoz létre
     return "New song successfully added"
   }
 }
