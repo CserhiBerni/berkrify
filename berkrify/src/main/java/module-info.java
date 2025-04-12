@@ -1,14 +1,17 @@
 module com.example.berkrify {
   requires javafx.controls;
   requires javafx.fxml;
-  requires org.bouncycastle.provider;
-  requires java.sql;
 
-  opens com.example.berkrify to javafx.graphics, javafx.fxml;
+  requires java.net.http;
+
+  requires com.fasterxml.jackson.databind;
+  requires com.fasterxml.jackson.core;
+
+  opens com.example.berkrify to javafx.fxml;
   opens com.example.berkrify.controllers to javafx.fxml;
 
+  opens com.example.berkrify.dto to com.fasterxml.jackson.databind;
+
   exports com.example.berkrify;
-  exports com.example.berkrify.controllers;
-  exports com.example.berkrify.database;
-  exports com.example.berkrify.models;
 }
+

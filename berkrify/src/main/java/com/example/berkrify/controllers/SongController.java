@@ -1,79 +1,59 @@
 package com.example.berkrify.controllers;
 
-import com.example.berkrify.database.DatabaseConnection;
 import com.example.berkrify.models.Song;
+import com.example.berkrify.services.SongService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javafx.concurrent.Task;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class SongController {
-  public ObservableList<Song> loadSongs() {
-    ObservableList<Song> songs = FXCollections.observableArrayList();
-    String sql = "SELECT * FROM songs";
 
-    try (Connection conn = DatabaseConnection.getConnection()) {
-      assert conn != null;
-      try (PreparedStatement stmt = conn.prepareStatement(sql);
-           ResultSet rs = stmt.executeQuery()) {
+  @FXML
+  private TableView<Song> songsTable;
+  @FXML
+  private TableColumn<Song, Number> idColumn;
+  @FXML
+  private TableColumn<Song, String> artistColumn;
+  @FXML
+  private TableColumn<Song, String> albumColumn;
+  @FXML
+  private TableColumn<Song, String> titleColumn;
+  @FXML
+  private TableColumn<Song, Number> lengthColumn;
 
-        while (rs.next()) {
-          songs.add(new Song(
-              rs.getInt("id"),
-              rs.getString("song"),
-              rs.getString("artist"),
-              rs.getString("album"),
-              rs.getInt("length"),
-              rs.getInt("release_yr"),
-              rs.getString("genre"),
-              rs.getString("mp3"),
-              rs.getString("cover")
-          ));
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return songs;
+  private ObservableList<Song> songData = FXCollections.observableArrayList();
+  private final SongService songService = new SongService();
+
+  public void initialize() {
+    idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+    artistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
+    albumColumn.setCellValueFactory(cellData -> cellData.getValue().albumProperty());
+    titleColumn.setCellValueFactory(cellData -> cellData.getValue().songProperty());
+    lengthColumn.setCellValueFactory(cellData -> cellData.getValue().lengthProperty());
+
+    loadSongData();
   }
 
-  public boolean deleteSong(Song song) {
-    String sql = "DELETE FROM songs WHERE id = ?";
-    try (Connection conn = DatabaseConnection.getConnection()) {
-      assert conn != null;
-      try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
-        ps.setInt(1, song.getId());
-        int affectedRows = ps.executeUpdate();
-        return affectedRows > 0;
-
+  private void loadSongData() {
+    Task<ObservableList<Song>> loadTask = new Task<>() {
+      @Override
+      protected ObservableList<Song> call() throws Exception {
+        return FXCollections.observableArrayList(songService.getSongs());
       }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
+    };
 
-  public boolean updateSong(int id, String newTitle, String newArtist, String newAlbum, String newMp3, String newCover) {
-    String sql = "UPDATE songs SET song = ?, artist = ?, album = ?, mp3 = ?, cover = ? WHERE id = ?";
-    try (Connection conn = DatabaseConnection.getConnection()) {
-      assert conn != null;
-      try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, newTitle);
-        ps.setString(2, newArtist);
-        ps.setString(3, newAlbum);
-        ps.setString(4, newMp3);
-        ps.setString(5, newCover);
-        ps.setInt(6, id);
-        int affectedRows = ps.executeUpdate();
-        return affectedRows > 0;
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
-    }
+    loadTask.setOnSucceeded(event -> {
+      songData = loadTask.getValue();
+      songsTable.setItems(songData);
+    });
+
+    loadTask.setOnFailed(event -> {
+      loadTask.getException().printStackTrace();
+    });
+
+    new Thread(loadTask).start();
   }
 }

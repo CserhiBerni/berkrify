@@ -2,29 +2,21 @@ package com.example.berkrify;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.net.URL;
+import java.util.Objects;
 
 public class Main extends Application {
+
   @Override
-  public void start(Stage stage) {
-    try {
-      URL fxmlLocation = getClass().getResource("/com/example/berkrify/fxml/login.fxml");
-
-      if (fxmlLocation == null) {
-        throw new RuntimeException("FXML file not found! Check the path.");
-      }
-
-      FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
-      Scene scene = new Scene(fxmlLoader.load(), 650, 400);
-      stage.setTitle("Admin Login");
-      stage.setScene(scene);
-      stage.show();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  public void start(Stage primaryStage) throws Exception {
+    Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/example/berkrify/views/song_list.fxml")));
+    Scene scene = new Scene(root);
+    primaryStage.setTitle("Berkrify - Song Manager");
+    primaryStage.setScene(scene);
+    primaryStage.show();
   }
 
   public static void main(String[] args) {

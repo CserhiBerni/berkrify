@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.berkrify.controllers.SongController" spacing="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <TableView fx:id="songsTable">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50" />
+            <TableColumn fx:id="artistColumn" text="Artist" prefWidth="150" />
+            <TableColumn fx:id="albumColumn" text="Album" prefWidth="150" />
+            <TableColumn fx:id="titleColumn" text="Song" prefWidth="150" />
+            <TableColumn fx:id="lengthColumn" text="Length" prefWidth="60" />
+        </columns>
+    </TableView>
+</VBox>

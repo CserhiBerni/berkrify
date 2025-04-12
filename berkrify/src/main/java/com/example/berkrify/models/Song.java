@@ -5,25 +5,32 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Song {
   private final SimpleIntegerProperty id;
-  private final SimpleStringProperty title;
   private final SimpleStringProperty artist;
   private final SimpleStringProperty album;
+  private final SimpleStringProperty song;
   private final SimpleIntegerProperty length;
   private final SimpleIntegerProperty releaseYear;
   private final SimpleStringProperty genre;
   private final SimpleStringProperty mp3;
   private final SimpleStringProperty cover;
+  private final SimpleIntegerProperty playCount;
+  private final SimpleStringProperty lastPlayed;
+  private final SimpleStringProperty createdAt;
 
-  public Song(int id, String title, String artist, String album, int length, int releaseYear, String genre, String mp3, String cover) {
+
+  public Song(int id, String artist, String album, String song, int length, int releaseYear, String genre, String mp3, String cover, int playCount, String lastPlayed, String createdAt) {
     this.id = new SimpleIntegerProperty(id);
-    this.title = new SimpleStringProperty(title);
     this.artist = new SimpleStringProperty(artist);
     this.album = new SimpleStringProperty(album);
+    this.song = new SimpleStringProperty(song);
     this.length = new SimpleIntegerProperty(length);
     this.releaseYear = new SimpleIntegerProperty(releaseYear);
     this.genre = new SimpleStringProperty(genre);
     this.mp3 = new SimpleStringProperty(mp3);
     this.cover = new SimpleStringProperty(cover);
+    this.playCount = new SimpleIntegerProperty(playCount);
+    this.lastPlayed = new SimpleStringProperty(lastPlayed);
+    this.createdAt = new SimpleStringProperty(createdAt);
   }
 
   public int getId() {
@@ -32,14 +39,6 @@ public class Song {
 
   public SimpleIntegerProperty idProperty() {
     return id;
-  }
-
-  public String getTitle() {
-    return title.get();
-  }
-
-  public SimpleStringProperty titleProperty() {
-    return title;
   }
 
   public String getArtist() {
@@ -56,6 +55,14 @@ public class Song {
 
   public SimpleStringProperty albumProperty() {
     return album;
+  }
+
+  public String getSong() {
+    return song.get();
+  }
+
+  public SimpleStringProperty songProperty() {
+    return song;
   }
 
   public int getLength() {
@@ -96,5 +103,29 @@ public class Song {
 
   public SimpleStringProperty coverProperty() {
     return cover;
+  }
+
+  public int getPlayCount() {
+    return playCount.get();
+  }
+
+  public SimpleIntegerProperty playCountProperty() {
+    return playCount;
+  }
+
+  public String getLastPlayed() {
+    return lastPlayed.get();
+  }
+
+  public SimpleStringProperty lastPlayedProperty() {
+    return lastPlayed;
+  }
+
+  public String getCreatedAt() {
+    return createdAt.get();
+  }
+
+  public SimpleStringProperty createdAtProperty() {
+    return createdAt;
   }
 }
