@@ -1,6 +1,6 @@
 package com.example.berkrify.services;
 
-import com.example.berkrify.dto.SimpleSong;
+import com.example.berkrify.dto.SongDto;
 import com.example.berkrify.models.Song;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,22 +31,22 @@ public class SongService {
 
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     if (response.statusCode() == 200) {
-      List<SimpleSong> simpleSongs = objectMapper.readValue(response.body(), new TypeReference<List<SimpleSong>>() {});
+      List<SongDto> dtos = objectMapper.readValue(response.body(), new TypeReference<List<SongDto>>() {});
       List<Song> songs = new ArrayList<>();
-      for (SimpleSong s : simpleSongs) {
+      for (SongDto dto : dtos) {
         songs.add(new Song(
-            s.getId(),
-            s.getArtist(),
-            s.getAlbum(),
-            s.getSong(),
-            s.getLength(),
-            s.getReleaseYear(),
-            s.getGenre(),
-            s.getMp3(),
-            s.getCover(),
-            s.getPlayCount(),
-            s.getLastPlayed(),
-            s.getCreatedAt()
+            dto.getId(),
+            dto.getArtist(),
+            dto.getAlbum(),
+            dto.getSong(),
+            dto.getLength(),
+            dto.getReleaseYear(),
+            dto.getGenre(),
+            dto.getMp3(),
+            dto.getCover(),
+            dto.getPlayCount(),
+            dto.getLastPlayed(),
+            dto.getCreatedAt()
         ));
       }
       return songs;

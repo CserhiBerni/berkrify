@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.berkrify.controllers.UserController"
+      spacing="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10" />
+    </padding>
+
+    <Button text="Back" onAction="#handleBack"/>
+
+    <TableView fx:id="usersTable">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="nameColumn" text="Name" />
+            <TableColumn fx:id="emailColumn" text="Email" />
+            <TableColumn fx:id="passwordColumn" text="Password" />
+            <TableColumn fx:id="profilePictureColumn" text="Profile Picture" />
+            <TableColumn fx:id="createdColumn" text="Created" />
+            <TableColumn fx:id="roleColumn" text="Role" />
+        </columns>
+    </TableView>
+</VBox>

@@ -5,9 +5,16 @@ import com.example.berkrify.services.SongService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class SongController {
 
@@ -26,6 +33,12 @@ public class SongController {
 
   private ObservableList<Song> songData = FXCollections.observableArrayList();
   private final SongService songService = new SongService();
+
+  private Stage stage;
+
+  public void setStage(Stage stage) {
+    this.stage = stage;
+  }
 
   public void initialize() {
     idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
@@ -55,5 +68,17 @@ public class SongController {
     });
 
     new Thread(loadTask).start();
+  }
+
+  public void handleBack(ActionEvent event) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/dashboard.fxml"));
+      Parent root = loader.load();
+      Scene scene = new Scene(root, 650, 400);
+      stage.setScene(scene);
+      stage.setTitle("Berkrify | Dashboard");
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 }
