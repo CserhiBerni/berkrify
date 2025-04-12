@@ -10,9 +10,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 
@@ -30,6 +33,8 @@ public class SongController {
   private TableColumn<Song, String> titleColumn;
   @FXML
   private TableColumn<Song, Number> lengthColumn;
+  @FXML
+  private TableColumn<Song, Void> actionColumn;
 
   private ObservableList<Song> songData = FXCollections.observableArrayList();
   private final SongService songService = new SongService();
@@ -47,7 +52,60 @@ public class SongController {
     titleColumn.setCellValueFactory(cellData -> cellData.getValue().songProperty());
     lengthColumn.setCellValueFactory(cellData -> cellData.getValue().lengthProperty());
 
+    addDeleteButtonToTable();
+
     loadSongData();
+  }
+
+  private void addDeleteButtonToTable() {
+    Callback<TableColumn<Song, Void>, TableCell<Song, Void>> cellFactory = new Callback<>() {
+      @Override
+      public TableCell<Song, Void> call(final TableColumn<Song, Void> param) {
+        return new TableCell<>() {
+
+          private final Button btn = new Button("Delete");
+
+          {
+            btn.setOnAction(event -> {
+              Song song = getTableView().getItems().get(getIndex());
+              handleDeleteSong(song);
+            });
+          }
+
+          @Override
+          public void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+              setGraphic(null);
+            } else {
+              setGraphic(btn);
+            }
+          }
+        };
+      }
+    };
+
+    actionColumn.setCellFactory(cellFactory);
+  }
+
+  private void handleDeleteSong(Song song) {
+    Task<Void> deleteTask = new Task<>() {
+      @Override
+      protected Void call() throws Exception {
+        songService.deleteUser(song.getId());
+        return null;
+      }
+    };
+
+    deleteTask.setOnSucceeded(event -> {
+      songData.remove(song);
+    });
+
+    deleteTask.setOnFailed(event -> {
+      deleteTask.getException().printStackTrace();
+    });
+
+    new Thread(deleteTask).start();
   }
 
   private void loadSongData() {
