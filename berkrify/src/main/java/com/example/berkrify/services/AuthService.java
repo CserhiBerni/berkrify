@@ -10,28 +10,24 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
-public class AuthService {
-  private final HttpClient httpClient;
-  private final ObjectMapper objectMapper;
-  private final String baseUrl = "http://localhost:3000";
+public class AuthService extends BaseService {
 
   public AuthService() {
-    httpClient = HttpClient.newHttpClient();
-    objectMapper = new ObjectMapper();
+    super(HttpClient.newHttpClient(), new ObjectMapper());
   }
 
   public AuthResponse login(String email, String password) throws Exception {
     String requestBody = String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email, password);
     HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(baseUrl + "/user/login"))
+        .uri(URI.create(getBaseUrl() + "/user/login"))
         .header("Content-Type", "application/json")
         .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
         .build();
 
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == 200 || response.statusCode() == 201) {
-      AuthResponse authResponse = objectMapper.readValue(response.body(), AuthResponse.class);
+      AuthResponse authResponse = getObjectMapper().readValue(response.body(), AuthResponse.class);
       Session.getInstance().setToken(authResponse.getToken());
       return authResponse;
     } else {

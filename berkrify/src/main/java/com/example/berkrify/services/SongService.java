@@ -12,26 +12,21 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongService {
-
-  private final String baseUrl = "http://localhost:3000";
-  private final HttpClient httpClient;
-  private final ObjectMapper objectMapper;
+public class SongService extends BaseService {
 
   public SongService() {
-    httpClient = HttpClient.newHttpClient();
-    objectMapper = new ObjectMapper();
+    super(HttpClient.newHttpClient(), new ObjectMapper());
   }
 
   public List<Song> getSongs() throws Exception {
     HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(baseUrl + "/songs"))
+        .uri(URI.create(getBaseUrl() + "/songs"))
         .GET()
         .build();
 
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
     if (response.statusCode() == 200) {
-      List<SongDto> dtos = objectMapper.readValue(response.body(), new TypeReference<List<SongDto>>() {});
+      List<SongDto> dtos = getObjectMapper().readValue(response.body(), new TypeReference<List<SongDto>>() {});
       List<Song> songs = new ArrayList<>();
       for (SongDto dto : dtos) {
         songs.add(new Song(

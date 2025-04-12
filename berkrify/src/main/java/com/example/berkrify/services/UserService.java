@@ -13,20 +13,15 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService {
-
-  private final HttpClient httpClient;
-  private final String baseUrl = "http://localhost:3000";
-  private final ObjectMapper objectMapper;
+public class UserService extends BaseService {
 
   public UserService() {
-    httpClient = HttpClient.newHttpClient();
-    objectMapper = new ObjectMapper();
+    super(HttpClient.newHttpClient(), new ObjectMapper());
   }
 
   public List<User> getUsers() throws Exception {
     HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-        .uri(URI.create(baseUrl + "/user"))
+        .uri(URI.create(getBaseUrl() + "/user"))
         .header("Accept", "application/json")
         .GET();
 
@@ -36,10 +31,10 @@ public class UserService {
     }
 
     HttpRequest request = requestBuilder.build();
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == 200) {
-      List<UserDto> dtos = objectMapper.readValue(response.body(), new TypeReference<List<UserDto>>() {});
+      List<UserDto> dtos = getObjectMapper().readValue(response.body(), new TypeReference<List<UserDto>>() {});
       List<User> users = new ArrayList<>();
       for (UserDto dto : dtos) {
         users.add(new User(dto.getId(), dto.getName(), dto.getEmail(), dto.getPassword(),
