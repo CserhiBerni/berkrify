@@ -1,6 +1,7 @@
 package com.example.berkrify.services;
 
 import com.example.berkrify.dto.SongDto;
+import com.example.berkrify.dto.UpdateSongDto;
 import com.example.berkrify.models.Song;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +52,7 @@ public class SongService extends BaseService {
     }
   }
 
-  public void deleteUser(int id) throws Exception {
+  public void deleteSong(int id) throws Exception {
     HttpRequest request = HttpRequest.newBuilder()
         .uri(URI.create(getBaseUrl() + "/songs/" + id))
         .DELETE()
@@ -59,6 +61,34 @@ public class SongService extends BaseService {
     HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
     if (response.statusCode() != 200 && response.statusCode() != 204) {
       throw new RuntimeException("Failed to delete song, status code: " + response.statusCode());
+    }
+  }
+
+  public void updateSong(Song song) throws Exception {
+    UpdateSongDto dto = new UpdateSongDto();
+    dto.setArtist(song.getArtist());
+    dto.setAlbum(song.getAlbum());
+    dto.setSong(song.getSong());
+    dto.setLength(song.getLength());
+    dto.setReleaseYear(song.getReleaseYear());
+    dto.setGenre(song.getGenre());
+    dto.setMp3(song.getMp3());
+    dto.setCover(song.getCover());
+    dto.setPlayCount(song.getPlayCount());
+    dto.setLastPlayed(song.getLastPlayed());
+    dto.setCreatedAt(song.getCreatedAt());
+
+    String jsonData = getObjectMapper().writeValueAsString(dto);
+
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create(getBaseUrl() + "/songs/" + song.getId()))
+        .header("Content-Type", "application/json")
+        .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonData, StandardCharsets.UTF_8))
+        .build();
+
+    HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+    if (response.statusCode() != 200 && response.statusCode() != 204) {
+      throw new RuntimeException("Failed to update song, status code: " + response.statusCode());
     }
   }
 }

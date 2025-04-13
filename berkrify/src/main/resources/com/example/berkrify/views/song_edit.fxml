@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane xmlns="http://javafx.com/javafx/17"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.example.berkrify.controllers.SongEditController"
+          hgap="10" vgap="10">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Artist:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="artistField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+    <Label text="Album:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="albumField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+    <Label text="Song:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="songField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+    <Label text="Length:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <TextField fx:id="lengthField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+    <Label text="Release Year:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <TextField fx:id="releaseYearField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+    <Label text="Genre:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+    <TextField fx:id="genreField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+    <Label text="MP3:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+    <TextField fx:id="mp3Field" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+    <Label text="Cover:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+    <TextField fx:id="coverField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+    <Button text="Save" GridPane.rowIndex="8" GridPane.columnIndex="0" onAction="#handleSave"/>
+    <Button text="Cancel" GridPane.rowIndex="8" GridPane.columnIndex="1" onAction="#handleCancel"/>
+</GridPane>

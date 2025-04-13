@@ -19,7 +19,8 @@
             <TableColumn fx:id="albumColumn" text="Album" prefWidth="150" />
             <TableColumn fx:id="titleColumn" text="Song" prefWidth="150" />
             <TableColumn fx:id="lengthColumn" text="Length" prefWidth="60" />
-            <TableColumn fx:id="actionColumn" text="Operations" />
+            <TableColumn fx:id="actionColumn" text="Delete" />
+            <TableColumn fx:id="editColumn" text="Edit" />
         </columns>
     </TableView>
 </VBox>

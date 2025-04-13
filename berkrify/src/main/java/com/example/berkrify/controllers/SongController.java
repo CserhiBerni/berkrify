@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -35,6 +36,8 @@ public class SongController {
   private TableColumn<Song, Number> lengthColumn;
   @FXML
   private TableColumn<Song, Void> actionColumn;
+  @FXML
+  private TableColumn<Song, Void> editColumn;
 
   private ObservableList<Song> songData = FXCollections.observableArrayList();
   private final SongService songService = new SongService();
@@ -53,6 +56,7 @@ public class SongController {
     lengthColumn.setCellValueFactory(cellData -> cellData.getValue().lengthProperty());
 
     addDeleteButtonToTable();
+    addEditButtonToTable();
 
     loadSongData();
   }
@@ -92,7 +96,7 @@ public class SongController {
     Task<Void> deleteTask = new Task<>() {
       @Override
       protected Void call() throws Exception {
-        songService.deleteUser(song.getId());
+        songService.deleteSong(song.getId());
         return null;
       }
     };
@@ -137,6 +141,59 @@ public class SongController {
       stage.setTitle("Berkrify | Dashboard");
     } catch (IOException ex) {
       ex.printStackTrace();
+    }
+  }
+
+  private void addEditButtonToTable() {
+    Callback<TableColumn<Song, Void>, TableCell<Song, Void>> cellFactory = new Callback<>() {
+      @Override
+      public TableCell<Song, Void> call(final TableColumn<Song, Void> param) {
+        return new TableCell<>() {
+
+          private final Button btn = new Button("Edit");
+
+          {
+            btn.setOnAction(event -> {
+              Song song = getTableView().getItems().get(getIndex());
+              openSongEditWindow(song);
+            });
+          }
+
+          @Override
+          public void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+              setGraphic(null);
+            } else {
+              setGraphic(btn);
+            }
+          }
+        };
+      }
+    };
+
+    editColumn.setCellFactory(cellFactory);
+  }
+
+  private void openSongEditWindow(Song song) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/song_edit.fxml"));
+      Parent root = loader.load();
+
+      SongEditController controller = loader.getController();
+      controller.setSong(song);
+
+      Stage editStage = new Stage();
+      editStage.setTitle("Edit Song");
+      editStage.setScene(new Scene(root, 400, 400));
+
+      controller.setStage(editStage);
+
+      editStage.showAndWait();
+
+      loadSongData();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }
