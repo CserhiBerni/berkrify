@@ -13,7 +13,7 @@ public class Main extends Application {
   public void start(Stage primaryStage) throws Exception {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/login.fxml"));
     Parent root = loader.load();
-    Scene scene = new Scene(root, 650, 400);
+    Scene scene = new Scene(root, 700, 450);
     primaryStage.setScene(scene);
     primaryStage.setTitle("Berkrify | Login");
 

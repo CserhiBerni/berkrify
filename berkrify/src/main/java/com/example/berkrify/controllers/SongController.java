@@ -136,7 +136,7 @@ public class SongController {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/dashboard.fxml"));
       Parent root = loader.load();
-      Scene scene = new Scene(root, 650, 400);
+      Scene scene = new Scene(root, 700, 450);
       stage.setScene(scene);
       stage.setTitle("Berkrify | Dashboard");
     } catch (IOException ex) {
@@ -184,7 +184,7 @@ public class SongController {
       controller.setSong(song);
 
       Stage editStage = new Stage();
-      editStage.setTitle("Edit Song");
+      editStage.setTitle("Berkrify | Edit Song");
       editStage.setScene(new Scene(root, 400, 400));
 
       controller.setStage(editStage);

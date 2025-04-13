@@ -146,7 +146,7 @@ public class UserController {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/dashboard.fxml"));
       Parent root = loader.load();
-      Scene scene = new Scene(root, 650, 400);
+      Scene scene = new Scene(root, 700, 450);
       stage.setScene(scene);
       stage.setTitle("Berkrify | Dashboard");
     } catch (IOException ex) {

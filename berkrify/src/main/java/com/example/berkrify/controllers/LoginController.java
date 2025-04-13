@@ -47,7 +47,7 @@ public class LoginController {
       try {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/dashboard.fxml"));
         Parent dashboardRoot = loader.load();
-        Scene dashboardScene = new Scene(dashboardRoot, 650, 400);
+        Scene dashboardScene = new Scene(dashboardRoot, 700, 450);
         primaryStage.setScene(dashboardScene);
         primaryStage.setTitle("Berkrify | Dashboard");
       } catch (Exception e) {

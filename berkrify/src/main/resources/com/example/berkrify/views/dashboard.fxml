@@ -10,4 +10,5 @@
     </padding>
     <Button text="Manage Songs" onAction="#handleManageSongs"/>
     <Button text="Manage Users" onAction="#handleManageUsers"/>
+    <Button text="Logout" onAction="#handleLogout"/>
 </VBox>
