@@ -174,4 +174,26 @@ public class UserController {
       }
     }
   }
+
+  public void handleRegisterNewUser(ActionEvent event) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/user_register.fxml"));
+      Parent registerRoot = loader.load();
+
+      UserRegisterController registerController = loader.getController();
+
+      Stage registerStage = new Stage();
+      registerStage.setTitle("Berkrify | Register New User");
+      registerStage.setScene(new Scene(registerRoot, 700, 450));
+
+      registerController.setStage(registerStage);
+
+      registerStage.showAndWait();
+
+      loadUserData();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
 }
