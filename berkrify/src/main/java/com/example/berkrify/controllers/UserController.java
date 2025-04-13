@@ -2,6 +2,8 @@ package com.example.berkrify.controllers;
 
 import com.example.berkrify.models.User;
 import com.example.berkrify.services.UserService;
+import com.example.berkrify.util.AlertWindow;
+import com.example.berkrify.util.Session;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -10,9 +12,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 
@@ -27,15 +33,13 @@ public class UserController {
   @FXML
   private TableColumn<User, String> emailColumn;
   @FXML
-  private TableColumn<User, String> passwordColumn;
-  @FXML
-  private TableColumn<User, String> profilePictureColumn;
+  private TableColumn<User, String> roleColumn;
   @FXML
   private TableColumn<User, String> createdColumn;
   @FXML
-  private TableColumn<User, String> roleColumn;
+  private TableColumn<User, Void> actionColumn;
 
-  private ObservableList<User> userData = FXCollections.observableArrayList();
+  private final ObservableList<User> userData = FXCollections.observableArrayList();
   private final UserService userService = new UserService();
 
   private Stage stage;
@@ -49,12 +53,73 @@ public class UserController {
     idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
     nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
     emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-    passwordColumn.setCellValueFactory(cellData -> cellData.getValue().passwordProperty());
-    profilePictureColumn.setCellValueFactory(cellData -> cellData.getValue().profilePictureProperty());
-    createdColumn.setCellValueFactory(cellData -> cellData.getValue().createdProperty());
     roleColumn.setCellValueFactory(cellData -> cellData.getValue().roleProperty());
+    createdColumn.setCellValueFactory(cellData -> cellData.getValue().createdProperty());
+
+    addDeleteButtonToTable();
 
     loadUserData();
+  }
+
+  private void addDeleteButtonToTable() {
+    Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<>() {
+      @Override
+      public TableCell<User, Void> call(final TableColumn<User, Void> param) {
+        return new TableCell<>() {
+
+          private final Button btn = new Button("Delete");
+
+          {
+            btn.setOnAction(event -> {
+              User user = getTableView().getItems().get(getIndex());
+              handleDeleteUser(user);
+            });
+          }
+
+          @Override
+          public void updateItem(Void item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty) {
+              setGraphic(null);
+            } else {
+              setGraphic(btn);
+            }
+          }
+        };
+      }
+    };
+
+    actionColumn.setCellFactory(cellFactory);
+  }
+
+  private void handleDeleteUser(User user) {
+    if (user.getId() == Session.getInstance().getCurrentUserId()) {
+      AlertWindow alertWindow = new AlertWindow(
+          "Deletion error",
+          "You can not delete yourself.",
+          Alert.AlertType.ERROR
+      );
+      alertWindow.showAlert();
+      return;
+    }
+
+    Task<Void> deleteTask = new Task<>() {
+      @Override
+      protected Void call() throws Exception {
+        userService.deleteUser(user.getId());
+        return null;
+      }
+    };
+
+    deleteTask.setOnSucceeded(event -> {
+      userData.remove(user);
+    });
+
+    deleteTask.setOnFailed(event -> {
+      deleteTask.getException().printStackTrace();
+    });
+
+    new Thread(deleteTask).start();
   }
 
   private void loadUserData() {

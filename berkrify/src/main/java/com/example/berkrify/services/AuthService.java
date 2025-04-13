@@ -29,6 +29,7 @@ public class AuthService extends BaseService {
     if (response.statusCode() == 200 || response.statusCode() == 201) {
       AuthResponse authResponse = getObjectMapper().readValue(response.body(), AuthResponse.class);
       Session.getInstance().setToken(authResponse.getToken());
+      Session.getInstance().setCurrentUserId(authResponse.getUserId());
       return authResponse;
     } else {
       throw new Exception("Login failed with status code: " + response.statusCode());

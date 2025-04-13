@@ -19,10 +19,9 @@
             <TableColumn fx:id="idColumn" text="ID" />
             <TableColumn fx:id="nameColumn" text="Name" />
             <TableColumn fx:id="emailColumn" text="Email" />
-            <TableColumn fx:id="passwordColumn" text="Password" />
-            <TableColumn fx:id="profilePictureColumn" text="Profile Picture" />
             <TableColumn fx:id="createdColumn" text="Created" />
             <TableColumn fx:id="roleColumn" text="Role" />
+            <TableColumn fx:id="actionColumn" text="Operations" />
         </columns>
     </TableView>
 </VBox>

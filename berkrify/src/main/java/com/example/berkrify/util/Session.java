@@ -3,6 +3,7 @@ package com.example.berkrify.util;
 public class Session {
   private static Session instance;
   private String token;
+  private int currentUserId;
 
   private Session() { }
 
@@ -19,5 +20,13 @@ public class Session {
 
   public void setToken(String token) {
     this.token = token;
+  }
+
+  public int getCurrentUserId() {
+    return currentUserId;
+  }
+
+  public void setCurrentUserId(int currentUserId) {
+    this.currentUserId = currentUserId;
   }
 }

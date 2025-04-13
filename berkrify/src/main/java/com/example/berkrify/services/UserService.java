@@ -46,4 +46,15 @@ public class UserService extends BaseService {
     }
   }
 
+  public void deleteUser(int id) throws Exception {
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create(getBaseUrl() + "/user/" + id))
+        .DELETE()
+        .build();
+
+    HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+    if (response.statusCode() != 200 && response.statusCode() != 204) {
+      throw new RuntimeException("Failed to delete user, status code: " + response.statusCode());
+    }
+  }
 }
