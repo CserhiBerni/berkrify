@@ -3,6 +3,7 @@ package com.example.berkrify.controllers;
 import com.example.berkrify.models.User;
 import com.example.berkrify.services.UserService;
 import com.example.berkrify.util.AlertWindow;
+import com.example.berkrify.util.CSVExporter;
 import com.example.berkrify.util.Session;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,9 +18,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.File;
 import java.io.IOException;
 
 public class UserController {
@@ -151,6 +154,24 @@ public class UserController {
       stage.setTitle("Berkrify | Dashboard");
     } catch (IOException ex) {
       ex.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void handleExport(ActionEvent event) {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Export Users to CSV");
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+    fileChooser.getExtensionFilters().add(extFilter);
+
+    Stage stage = (Stage) usersTable.getScene().getWindow();
+    File file = fileChooser.showSaveDialog(stage);
+    if (file != null) {
+      try {
+        CSVExporter.exportUsersToCSV(file, usersTable);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 }

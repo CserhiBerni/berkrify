@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.berkrify.controllers.SongController" spacing="10">
     <padding>
@@ -23,4 +24,8 @@
             <TableColumn fx:id="editColumn" text="Edit" />
         </columns>
     </TableView>
+
+    <HBox spacing="10">
+        <Button text="Export CSV" onAction="#handleExport"/>
+    </HBox>
 </VBox>
