@@ -19,6 +19,27 @@ public class UserService extends BaseService {
     super(HttpClient.newHttpClient(), new ObjectMapper());
   }
 
+  public UserDto fetchUserProfile(int userId) throws Exception {
+    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+        .uri(URI.create(getBaseUrl() + "/user/" + userId))
+        .header("Accept", "application/json")
+        .GET();
+
+    String token = Session.getInstance().getToken();
+    if (token != null && !token.isEmpty()) {
+      requestBuilder.header("Authorization", "Bearer " + token);
+    }
+
+    HttpRequest request = requestBuilder.build();
+    HttpResponse<String> response = getHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() == 200) {
+      return getObjectMapper().readValue(response.body(), new TypeReference<UserDto>() {});
+    } else {
+      throw new RuntimeException("Failed to fetch user profile, status code: " + response.statusCode());
+    }
+  }
+
   public List<User> getUsers() throws Exception {
     HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
         .uri(URI.create(getBaseUrl() + "/user"))

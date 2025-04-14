@@ -1,7 +1,10 @@
 package com.example.berkrify.controllers;
 
+import com.example.berkrify.dto.UserDto;
 import com.example.berkrify.models.AuthResponse;
 import com.example.berkrify.services.AuthService;
+import com.example.berkrify.services.UserService;
+import com.example.berkrify.util.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,14 +29,20 @@ public class LoginController {
 
   public void handleLogin(ActionEvent event) {
     errorLabel.setText("");
-    String email = emailField.getText();
-    String password = passwordField.getText();
+    String email = emailField.getText().trim();
+    String password = passwordField.getText().trim();
 
     new Thread(() -> {
       try {
         AuthResponse authResponse = authService.login(email, password);
         if (authResponse != null && authResponse.getToken() != null) {
-          openDashboard();
+          UserService userService = new UserService();
+          UserDto userDto = userService.fetchUserProfile(authResponse.getUserId());
+          Session.getInstance().setCurrentUserName(userDto.getName());
+
+          javafx.application.Platform.runLater(() -> {
+            openDashboard();
+          });
         }
       } catch (Exception e) {
         e.printStackTrace();

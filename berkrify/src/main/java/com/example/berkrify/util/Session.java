@@ -4,6 +4,7 @@ public class Session {
   private static Session instance;
   private String token;
   private int currentUserId;
+  private String currentUserName;
 
   private Session() { }
 
@@ -28,5 +29,13 @@ public class Session {
 
   public void setCurrentUserId(int currentUserId) {
     this.currentUserId = currentUserId;
+  }
+
+  public String getCurrentUserName() {
+    return currentUserName;
+  }
+
+  public void setCurrentUserName(String currentUserName) {
+    this.currentUserName = currentUserName;
   }
 }

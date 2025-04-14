@@ -2,15 +2,30 @@ package com.example.berkrify.controllers;
 
 import com.example.berkrify.util.Session;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class DashboardController {
+
+  @FXML
+  private Label welcomeLabel;
+
+  @FXML
+  public void initialize() {
+    String userName = Session.getInstance().getCurrentUserName();
+    if (userName != null && !userName.isEmpty()) {
+      welcomeLabel.setText("Welcome " + userName + "!");
+    } else {
+      welcomeLabel.setText("Welcome!");
+    }
+  }
 
   public void handleManageSongs(ActionEvent event) throws IOException {
     Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
