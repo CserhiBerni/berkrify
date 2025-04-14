@@ -29,4 +29,6 @@
             GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
 
     <Label fx:id="messageLabel" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+
+    <Button text="Cancel" onAction="#handleCancel"/>
 </GridPane>

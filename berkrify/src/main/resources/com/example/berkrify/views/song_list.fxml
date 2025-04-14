@@ -27,5 +27,6 @@
 
     <HBox spacing="10">
         <Button text="Export CSV" onAction="#handleExport"/>
+        <Button text="Upload Files" onAction="#handleUploadFiles"/>
     </HBox>
 </VBox>

@@ -85,4 +85,9 @@ public class UserRegisterController {
 
     new Thread(registerTask).start();
   }
+
+  @FXML
+  private void handleCancel(ActionEvent event) {
+    stage.close();
+  }
 }

@@ -40,9 +40,7 @@ public class LoginController {
           UserDto userDto = userService.fetchUserProfile(authResponse.getUserId());
           Session.getInstance().setCurrentUserName(userDto.getName());
 
-          javafx.application.Platform.runLater(() -> {
-            openDashboard();
-          });
+          javafx.application.Platform.runLater(this::openDashboard);
         }
       } catch (Exception e) {
         e.printStackTrace();

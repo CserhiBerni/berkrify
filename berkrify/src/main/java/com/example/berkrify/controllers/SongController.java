@@ -188,7 +188,7 @@ public class SongController {
 
       Stage editStage = new Stage();
       editStage.setTitle("Berkrify | Edit Song");
-      editStage.setScene(new Scene(root, 400, 400));
+      editStage.setScene(new Scene(root, 700, 450));
 
       controller.setStage(editStage);
 
@@ -215,6 +215,20 @@ public class SongController {
       } catch (IOException e) {
         e.printStackTrace();
       }
+    }
+  }
+
+  @FXML
+  public void handleUploadFiles(ActionEvent event) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/file_upload.fxml"));
+      Parent root = loader.load();
+      Stage uploadStage = new Stage();
+      uploadStage.setTitle("Berkfify | Upload Files");
+      uploadStage.setScene(new Scene(root, 700, 450));
+      uploadStage.showAndWait();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }
