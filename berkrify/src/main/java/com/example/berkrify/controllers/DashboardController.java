@@ -55,6 +55,7 @@ public class DashboardController {
   public void handleLogout(ActionEvent event) {
     Session.getInstance().setToken(null);
     Session.getInstance().setCurrentUserId(0);
+    Session.getInstance().setCurrentUserName("");
 
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/login.fxml"));

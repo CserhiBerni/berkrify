@@ -1,6 +1,5 @@
 package com.example.berkrify.controllers;
 
-import com.example.berkrify.models.AuthResponse;
 import com.example.berkrify.services.AuthService;
 import com.example.berkrify.util.AlertWindow;
 import javafx.concurrent.Task;

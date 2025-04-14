@@ -4,11 +4,13 @@ import com.example.berkrify.dto.UserDto;
 import com.example.berkrify.models.AuthResponse;
 import com.example.berkrify.services.AuthService;
 import com.example.berkrify.services.UserService;
+import com.example.berkrify.util.AlertWindow;
 import com.example.berkrify.util.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -38,13 +40,24 @@ public class LoginController {
         if (authResponse != null && authResponse.getToken() != null) {
           UserService userService = new UserService();
           UserDto userDto = userService.fetchUserProfile(authResponse.getUserId());
-          Session.getInstance().setCurrentUserName(userDto.getName());
 
-          javafx.application.Platform.runLater(this::openDashboard);
+          if (userDto.getRole().equals("Admin")) {
+            Session.getInstance().setCurrentUserName(userDto.getName());
+
+            javafx.application.Platform.runLater(this::openDashboard);
+          } else {
+            AlertWindow alertWindow = new AlertWindow(
+                "Login failed", "Invalid credentials or error occurred.", Alert.AlertType.ERROR
+            );
+            javafx.application.Platform.runLater(alertWindow::showAlert);
+          }
         }
       } catch (Exception e) {
         e.printStackTrace();
-        javafx.application.Platform.runLater(() -> errorLabel.setText("Invalid credentials or error occurred."));
+        AlertWindow alertWindow = new AlertWindow(
+            "Login failed", "Invalid credentials or error occurred.", Alert.AlertType.ERROR
+        );
+        javafx.application.Platform.runLater(alertWindow::showAlert);
       }
     }).start();
   }
@@ -59,7 +72,10 @@ public class LoginController {
         primaryStage.setTitle("Berkrify | Dashboard");
       } catch (Exception e) {
         e.printStackTrace();
-        errorLabel.setText("Failed to load dashboard.");
+        AlertWindow alertWindow = new AlertWindow(
+            "Load failed", "Failed to load dashboard.", Alert.AlertType.ERROR
+        );
+        alertWindow.showAlert();
       }
     });
   }

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <GridPane xmlns="http://javafx.com/javafx/17"
           xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.example.berkrify.controllers.UserRegisterController"
@@ -25,10 +26,10 @@
     <Label text="Role:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
     <TextField fx:id="roleField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-    <Button text="Register" onAction="#handleRegister"
-            GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="10">
+        <Button text="Register" onAction="#handleRegister"/>
+        <Button text="Cancel" onAction="#handleCancel"/>
+    </HBox>
 
     <Label fx:id="messageLabel" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-
-    <Button text="Cancel" onAction="#handleCancel"/>
 </GridPane>
