@@ -9,7 +9,8 @@
 <GridPane xmlns="http://javafx.com/javafx/17"
           xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.example.berkrify.controllers.UserRegisterController"
-          hgap="10" vgap="10">
+          hgap="10" vgap="10"
+          alignment="CENTER">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
@@ -26,10 +27,10 @@
     <Label text="Role:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
     <TextField fx:id="roleField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-    <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="10">
+    <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="10" alignment="CENTER">
         <Button text="Register" onAction="#handleRegister"/>
         <Button text="Cancel" onAction="#handleCancel"/>
     </HBox>
 
-    <Label fx:id="messageLabel" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+    <Label fx:id="messageLabel" GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.columnSpan="2" alignment="CENTER"/>
 </GridPane>

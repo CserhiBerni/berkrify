@@ -11,9 +11,14 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-    <Label text="Login"/>
-    <TextField fx:id="emailField" promptText="Email"/>
-    <PasswordField fx:id="passwordField" promptText="Password"/>
+
+    <Label text="Admin Login"/>
+
+    <TextField fx:id="emailField" promptText="Email" maxWidth="200"/>
+    <PasswordField fx:id="passwordField" promptText="Password" maxWidth="200"/>
+
     <Button text="Login" onAction="#handleLogin"/>
+
     <Label fx:id="errorLabel" textFill="red"/>
 </VBox>
+
