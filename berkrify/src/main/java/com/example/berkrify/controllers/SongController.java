@@ -5,6 +5,8 @@ import com.example.berkrify.services.SongService;
 import com.example.berkrify.util.CSVExporter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -24,6 +27,8 @@ import java.io.IOException;
 
 public class SongController {
 
+  @FXML
+  private TextField searchField;
   @FXML
   private TableView<Song> songsTable;
   @FXML
@@ -41,7 +46,7 @@ public class SongController {
   @FXML
   private TableColumn<Song, Void> editColumn;
 
-  private ObservableList<Song> songData = FXCollections.observableArrayList();
+  private final ObservableList<Song> songData = FXCollections.observableArrayList();
   private final SongService songService = new SongService();
 
   private Stage stage;
@@ -61,6 +66,23 @@ public class SongController {
     addEditButtonToTable();
 
     loadSongData();
+
+    FilteredList<Song> filteredData = new FilteredList<>(songData, p -> true);
+
+    searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+      filteredData.setPredicate(song -> {
+        if (newValue == null || newValue.isEmpty()) {
+          return true;
+        }
+        String lowerCaseFilter = newValue.toLowerCase();
+        return song.getSong() != null && song.getSong().toLowerCase().contains(lowerCaseFilter);
+      });
+    });
+
+    SortedList<Song> sortedData = new SortedList<>(filteredData);
+    sortedData.comparatorProperty().bind(songsTable.comparatorProperty());
+
+    songsTable.setItems(sortedData);
   }
 
   private void addDeleteButtonToTable() {
@@ -115,6 +137,8 @@ public class SongController {
   }
 
   private void loadSongData() {
+    songData.clear();
+
     Task<ObservableList<Song>> loadTask = new Task<>() {
       @Override
       protected ObservableList<Song> call() throws Exception {
@@ -123,8 +147,7 @@ public class SongController {
     };
 
     loadTask.setOnSucceeded(event -> {
-      songData = loadTask.getValue();
-      songsTable.setItems(songData);
+      songData.setAll(loadTask.getValue());
     });
 
     loadTask.setOnFailed(event -> {

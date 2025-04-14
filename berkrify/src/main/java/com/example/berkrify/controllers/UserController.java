@@ -7,6 +7,8 @@ import com.example.berkrify.util.CSVExporter;
 import com.example.berkrify.util.Session;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -27,6 +30,8 @@ import java.io.IOException;
 
 public class UserController {
 
+  @FXML
+  private TextField searchField;
   @FXML
   private TableView<User> usersTable;
   @FXML
@@ -62,6 +67,23 @@ public class UserController {
     addDeleteButtonToTable();
 
     loadUserData();
+
+    FilteredList<User> filteredData = new FilteredList<>(userData, p -> true);
+
+    searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+      filteredData.setPredicate(user -> {
+        if (newValue == null || newValue.isEmpty()) {
+          return true;
+        }
+        String lowerCaseFilter = newValue.toLowerCase();
+        return user.getName() != null && user.getName().toLowerCase().contains(lowerCaseFilter);
+      });
+    });
+
+    SortedList<User> sortedData = new SortedList<>(filteredData);
+    sortedData.comparatorProperty().bind(usersTable.comparatorProperty());
+
+    usersTable.setItems(sortedData);
   }
 
   private void addDeleteButtonToTable() {
@@ -126,6 +148,8 @@ public class UserController {
   }
 
   private void loadUserData() {
+    userData.clear();
+
     Task<ObservableList<User>> loadTask = new Task<>() {
       @Override
       protected ObservableList<User> call() throws Exception {
@@ -135,7 +159,6 @@ public class UserController {
 
     loadTask.setOnSucceeded(event -> {
       userData.setAll(loadTask.getValue());
-      usersTable.setItems(userData);
     });
 
     loadTask.setOnFailed(event -> {

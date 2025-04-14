@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.berkrify.controllers.SongController" spacing="10">
     <padding>
@@ -12,6 +13,8 @@
     </padding>
 
     <Button text="Back" onAction="#handleBack"/>
+
+    <TextField fx:id="searchField" promptText="Search by song title" maxWidth="300"/>
 
     <TableView fx:id="songsTable">
         <columns>
