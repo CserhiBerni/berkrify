@@ -1,6 +1,7 @@
 package com.example.berkrify;
 
 import com.example.berkrify.controllers.LoginController;
+import com.example.berkrify.util.GlobalErrorHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +25,9 @@ public class Main extends Application {
   }
 
   public static void main(String[] args) {
+    Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+      GlobalErrorHandler.handleCriticalError("Critical error occurred: " + throwable.getMessage());
+    });
     launch(args);
   }
 }

@@ -162,7 +162,11 @@ public class UserController {
     });
 
     loadTask.setOnFailed(event -> {
-      loadTask.getException().printStackTrace();
+      AlertWindow alertWindow = new AlertWindow(
+          "HTTP Error",
+          "HTTP GET Request Failed",
+          Alert.AlertType.ERROR);
+      alertWindow.showAlert();
     });
 
     new Thread(loadTask).start();

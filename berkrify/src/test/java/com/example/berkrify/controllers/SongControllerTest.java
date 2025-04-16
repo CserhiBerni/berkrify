@@ -6,6 +6,7 @@ import com.example.berkrify.testutil.JavaFXInitializer;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ public class SongControllerTest {
 
     setPrivateField(controller, "songService", songServiceMock);
 
+    setPrivateField(controller, "searchField", new TextField());
     setPrivateField(controller, "idColumn", new TableColumn<Song, Number>());
     setPrivateField(controller, "artistColumn", new TableColumn<Song, String>());
     setPrivateField(controller, "albumColumn", new TableColumn<Song, String>());

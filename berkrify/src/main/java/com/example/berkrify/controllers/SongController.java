@@ -2,6 +2,7 @@ package com.example.berkrify.controllers;
 
 import com.example.berkrify.models.Song;
 import com.example.berkrify.services.SongService;
+import com.example.berkrify.util.AlertWindow;
 import com.example.berkrify.util.CSVExporter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -151,7 +153,11 @@ public class SongController {
     });
 
     loadTask.setOnFailed(event -> {
-      loadTask.getException().printStackTrace();
+      AlertWindow alertWindow = new AlertWindow(
+          "HTTP Error",
+          "HTTP GET Request Failed",
+          Alert.AlertType.ERROR);
+      alertWindow.showAlert();
     });
 
     new Thread(loadTask).start();

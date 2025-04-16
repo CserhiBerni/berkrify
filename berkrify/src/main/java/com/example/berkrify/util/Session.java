@@ -15,6 +15,13 @@ public class Session {
     return instance;
   }
 
+  public void clear() {
+    instance = null;
+    token = "";
+    currentUserId = 0;
+    currentUserName = "";
+  }
+
   public String getToken() {
     return token;
   }

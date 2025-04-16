@@ -53,7 +53,6 @@ public class LoginController {
           }
         }
       } catch (Exception e) {
-        e.printStackTrace();
         AlertWindow alertWindow = new AlertWindow(
             "Login failed", "Invalid credentials or error occurred.", Alert.AlertType.ERROR
         );
