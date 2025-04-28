@@ -258,4 +258,23 @@ public class SongController {
       e.printStackTrace();
     }
   }
+
+  @FXML
+  public void handleShowStatistics(ActionEvent event) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource(
+          "/com/example/berkrify/views/song_statistics.fxml"
+      ));
+      Parent root = loader.load();
+      Stage stage = (Stage) songsTable.getScene().getWindow();
+      stage.setScene(new Scene(root, 700, 450));
+      stage.setTitle("Berkrify | Statistics");
+    } catch (IOException e) {
+      e.printStackTrace();         // debug
+      AlertWindow alertWindow = new AlertWindow(
+          "Error", "Loading failed", Alert.AlertType.ERROR
+      );
+      alertWindow.showAlert();
+    }
+  }
 }
