@@ -4,6 +4,7 @@ import com.example.berkrify.models.Song;
 import com.example.berkrify.services.SongService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -74,12 +75,14 @@ public class GenreStatsController {
   @FXML
   public void handleBack(ActionEvent event) {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource(
-          "/com/example/berkrify/views/song_list.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass()
+          .getResource("/com/example/berkrify/views/song_list.fxml"));
       Parent root = loader.load();
-      Stage st = (Stage) genreChart.getScene().getWindow();
-      st.setScene(new Scene(root, 700, 450));
-      st.setTitle("Berkrify | Songs");
+
+      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+      stage.setScene(new Scene(root, 700, 450));
+      stage.setTitle("Berkrify | Songs");
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -12,6 +12,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -51,10 +52,7 @@ public class SongController {
   private final ObservableList<Song> songData = FXCollections.observableArrayList();
   private final SongService songService = new SongService();
 
-  private Stage stage;
-
   public void setStage(Stage stage) {
-    this.stage = stage;
   }
 
   public void initialize() {
@@ -163,12 +161,16 @@ public class SongController {
     new Thread(loadTask).start();
   }
 
+  @FXML
   public void handleBack(ActionEvent event) {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/dashboard.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass()
+          .getResource("/com/example/berkrify/views/dashboard.fxml"));
       Parent root = loader.load();
-      Scene scene = new Scene(root, 700, 450);
-      stage.setScene(scene);
+
+      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+      stage.setScene(new Scene(root, 700, 450));
       stage.setTitle("Berkrify | Dashboard");
     } catch (IOException ex) {
       ex.printStackTrace();
@@ -270,7 +272,7 @@ public class SongController {
       stage.setScene(new Scene(root, 700, 450));
       stage.setTitle("Berkrify | Statistics");
     } catch (IOException e) {
-      e.printStackTrace();         // debug
+      e.printStackTrace();
       AlertWindow alertWindow = new AlertWindow(
           "Error", "Loading failed", Alert.AlertType.ERROR
       );
