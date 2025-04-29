@@ -16,7 +16,7 @@
 
     <Button text="Back" onAction="#handleBack"/>
 
-    <TextField fx:id="searchField" promptText="Search by song title" maxWidth="300"/>
+    <TextField fx:id="searchField" promptText="Search by user name" maxWidth="300"/>
 
     <TableView fx:id="usersTable">
         <columns>
