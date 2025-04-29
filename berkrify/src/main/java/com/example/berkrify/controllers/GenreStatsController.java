@@ -75,12 +75,9 @@ public class GenreStatsController {
   @FXML
   public void handleBack(ActionEvent event) {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass()
-          .getResource("/com/example/berkrify/views/song_list.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/song_list.fxml"));
       Parent root = loader.load();
-
       Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
       stage.setScene(new Scene(root, 700, 450));
       stage.setTitle("Berkrify | Songs");
     } catch (IOException e) {

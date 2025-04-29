@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
 <GridPane xmlns="http://javafx.com/javafx/17"
           xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.example.berkrify.controllers.UserRegisterController"
@@ -25,7 +26,9 @@
     <PasswordField fx:id="passwordField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
     <Label text="Role:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-    <TextField fx:id="roleField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    <ComboBox fx:id="roleComboBox"
+              GridPane.rowIndex="3" GridPane.columnIndex="1"
+              promptText="Select role"/>
 
     <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" spacing="10" alignment="CENTER">
         <Button text="Register" onAction="#handleRegister"/>

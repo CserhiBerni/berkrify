@@ -32,5 +32,6 @@
     <HBox spacing="10">
         <Button text="Export CSV" onAction="#handleExport"/>
         <Button text="Register New User" onAction="#handleRegisterNewUser"/>
+        <Button text="Statistics" onAction="#handleShowStatistics"/>
     </HBox>
 </VBox>

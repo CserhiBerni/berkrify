@@ -13,6 +13,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -50,10 +51,7 @@ public class UserController {
   private final ObservableList<User> userData = FXCollections.observableArrayList();
   private final UserService userService = new UserService();
 
-  private Stage stage;
-
   public void setStage(Stage stage) {
-    this.stage = stage;
   }
 
   @FXML
@@ -172,12 +170,16 @@ public class UserController {
     new Thread(loadTask).start();
   }
 
+  @FXML
   public void handleBack(ActionEvent event) {
     try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/dashboard.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass()
+          .getResource("/com/example/berkrify/views/dashboard.fxml"));
       Parent root = loader.load();
-      Scene scene = new Scene(root, 700, 450);
-      stage.setScene(scene);
+
+      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+      stage.setScene(new Scene(root, 700, 450));
       stage.setTitle("Berkrify | Dashboard");
     } catch (IOException ex) {
       ex.printStackTrace();
@@ -223,4 +225,18 @@ public class UserController {
     }
   }
 
+  @FXML
+  public void handleShowStatistics(ActionEvent event) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/berkrify/views/user_statistics.fxml"));
+      Parent root = loader.load();
+      Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+      stage.setScene(new Scene(root, 700, 450));
+      stage.setTitle("Berkrify | Role Statistics");
+    } catch (IOException e) {
+      e.printStackTrace();
+      new AlertWindow("Error", "Loading failed", Alert.AlertType.ERROR)
+          .showAlert();
+    }
+  }
 }

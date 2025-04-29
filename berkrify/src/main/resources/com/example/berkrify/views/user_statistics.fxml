@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.berkrify.controllers.RoleStatsController"
+      spacing="10" alignment="CENTER">
+    <PieChart fx:id="roleChart"
+              title="Users by Role"
+              prefWidth="600" prefHeight="400"/>
+    <Button text="Back" onAction="#handleBack"/>
+</VBox>
