@@ -1,65 +1,77 @@
-# 🎵 Berkrify Admin – JavaFX Application
+## Felhasználói dokumentáció – Berkrify Admin
 
-This is the administrative desktop application for the Berkrify system, built using JavaFX. It communicates with a backend REST API to manage users and songs.
+Ez az alkalmazás a Berkrify rendszer adminisztrációs felülete, amely lehetővé teszi a felhasználók és zenék kezelését, statisztikák kivonását admin jogosultságú felhasználók számára. A felület asztali alkalmazásként működik JavaFX alapokon.
 
-## 📁 Project Structure
+---
 
-- `src/` – Java source code (controllers, models, UI, tests)
-- `pom.xml` – Maven configuration
-- `target/` – Compiled files (generated automatically)
-- `.idea/` – IntelliJ project configuration
+### Áttekintés
 
-## ⚙️ Installation & Running
+A Berkrify Admin célja, hogy az adminisztrátorok egyszerűen tudják kezelni a rendszerben található:
 
-### 1. Requirements
+- Felhasználókat
+- Feltöltött zenéket
 
-- Java 17+
-- Maven 3.6+
-- Internet connection for downloading dependencies
-- Available REST backend (e.g. NestJS API)
+Az alkalmazás egy háttérrendszerhez (REST API) kapcsolódik, amelyen keresztül az adatok frissülnek, direkt adatbázis kapcsolatot így nem létesít a program.
 
-### 2. Build the project
+---
 
-```bash
-mvn clean install
-```
+### Indítás
 
-### 3. Run the application
+#### 1. Követelmények
+
+- Java 17 vagy újabb
+- Az admin alkalmazás `.jar` vagy `.exe` formában
+- Stabil internetkapcsolat
+- Elérhető Berkrify backend rendszer
+
+#### 2. Indítás módja
+
+Ha a programot forrásból indítod:
 
 ```bash
 mvn javafx:run
 ```
 
-> If `javafx:run` fails, try running the `main` method of the main application class (e.g., `BerkrifyApplication`) from your IDE.
-
-## 🔌 REST API Connection
-
-The application communicates with a remote REST API. You can configure the base URL in the source code or in a configuration file (e.g. `application.properties`).
-
-Supported features:
-- List users
-- Manage users
-- Add/delete songs
-- Statistics
-
-## 🧪 Testing
-
-This application supports unit and integration testing with mocked REST responses.
-
-Tests are located in:
+Ha egy lefordított `.jar` fájlod van:
 
 ```bash
-src/test/
+java -jar berkrify-admin.jar
 ```
 
-To run the tests:
+---
 
-```bash
-mvn test
-```
+### Használat
 
-## 🛠 Developer Notes
+#### Fő funkciók:
 
-- The UI is built using JavaFX and FXML
-- HTTP requests are made using the `HttpClient` class
-- Controllers directly interact with the backend API
+- **Felhasználók listázása** – megjeleníti a rendszerben regisztrált felhasználókat
+- **Felhasználók törlése** - adminisztrátorok eltávolíthatnak felhasználókat, értelem szerűen saját magukat futás közben nem
+- **Felhasználók regisztrálása** - új felhasználók felvétele, név, email, jelszó megadása, illetve szerepkör választása után
+- **Felhasználók keresése** - név alapján lehet keresni, illetve lehet a táblázatban minden tulajdonság alapján rendezni
+- **Export felhasználókból** - az összes felhasználói adatot lehet exportálni csv fájlba
+- **Felhasználói statisztika** - egy egyszerű kördiagrammos kimutatás a normál "user"-ek és "admin"-ok eloszlásáról
+- **Zenék listázása** – megjeleníti a rendszerben lévő zenéket
+- **Zenék törlése** - lehetőség van zeneszámok törlésére a rendszerből
+- **Zenék módosítása** - egy adott zene adatainak bármely tagját lehet módosítani manuálisan
+- **Zenék keresése** - cím alapján lehet keresni, illetve lehet a táblázatban minden tulajdonság alapján rendezni
+- **Export zenékből** - az összes zene adatot lehet exportálni csv fájlba
+- **Zenei statisztika** - egy egyszerű oszlopdiagrammos kimutatás a meglévő műfajok alapján
+- **Fájl feltöltés** - lehetőség van mp3 fájlok és borító képek feltöltésére is, zenékhez
+
+#### Általános lépések:
+
+1. **Indítsd el az alkalmazást**
+2. **Győződj meg róla, hogy a szükséges adatbázis és backend futnak**
+3. **Várd meg, míg betöltődik az adat**
+4. **Válassz egy menüpontot a főképernyőn**
+5. **Végezd el a kívánt műveletet (pl. új zene feltöltése)**
+
+---
+
+### Gyakori problémák
+
+| Probléma | Megoldás |
+|----------|----------|
+| Az alkalmazás nem indul el | Ellenőrizd, hogy telepítve van-e a Java 17 |
+| Nem tölt be az adat | Győződj meg róla, hogy a backend fut és elérhető |
+| Nem tudok feltölteni zenét | Ellenőrizd az internetkapcsolatot, illetve a REST API válaszokat |
