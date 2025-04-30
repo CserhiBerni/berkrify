@@ -66,4 +66,18 @@ berkrify-backend/
 ├── package.json            # Projektfüggőségek és parancsok
 ├── tsconfig.json           # TypeScript konfiguráció
 ```
- 
+ | Modul                         | Teszt típus | Teszt állapot |
+|------------------------------|-------------|----------------|
+| AuthController / AuthService | Unit & E2E  | ✅ Sikeres     |
+| AppController                | Unit        | ✅ Sikeres     |
+| GenreController / GenreService | Unit     | ✅ Sikeres     |
+| SongsController / SongsService | Unit & E2E | ✅ Sikeres     |
+| PlaylistService              | Unit        | ✅ Sikeres     |
+| UserService                  | Unit        | ✅ Sikeres     |
+| UserController               | E2E         | ❌ Sikertelen (404 hibák) |
+| FavoritesController          | E2E         | ❌ Sikertelen (401 hiba) |
+| PlaylistController           | E2E         | ❌ Sikertelen (401 hiba) |
+
+
+### Összegzés
+- A projekt legtöbb modulját sikerült lefedni automatikus tesztekkel. A sikertelen végpont-tesztek ellenére az alapfunkciók stabilan működnek, és a kód jól strukturált módon tesztelhető.
