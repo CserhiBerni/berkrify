@@ -14,7 +14,7 @@ Ez a mappa tartalmazza a **Berkrify** alkalmazás frontend részét, amely egy *
 ### 2. Telepítés
 
 ```bash
-cd berkrify-frontend
+cd .\berkrify\
 npm install
 ```
 
