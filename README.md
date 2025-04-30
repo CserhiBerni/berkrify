@@ -1,5 +1,30 @@
-# Felhasználói dokumentáció – Berkrify
+# Berkrify – Frontend
 
+Ez a mappa tartalmazza a **Berkrify** alkalmazás frontend részét, amely egy **React + TypeScript** alapú webalkalmazás. Az alkalmazás zenék lejátszását, kedvencek kezelését, lejátszási listák létrehozását és profil szerkesztést biztosít.
+
+---
+
+## Projektindítás
+
+### 1. Követelmények
+
+- **Node.js**
+- **npm**
+
+### 2. Telepítés
+
+```bash
+cd berkrify-frontend
+npm install
+```
+
+### 3. Projekt futtatása
+
+```bash
+npm run dev
+```
+
+# Felhasználói dokumentáció – Berkrify
 ## Bejelentkezés és regisztráció
 
 - A főoldalra érkezve látható a bejelentkezés/regisztráció ikon a navigációs sávban.
@@ -68,3 +93,4 @@
   - A **Save Changes** gombbal mentheted a módosításokat.
   - A **Cancel** gombbal megszakíthatod a szerkesztést.
 - A **Kijelentkezés** gomb segítségével elhagyhatod a fiókodat.
+
