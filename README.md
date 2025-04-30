@@ -75,3 +75,84 @@ java -jar berkrify-admin.jar
 | Az alkalmazás nem indul el | Ellenőrizd, hogy telepítve van-e a Java 17 |
 | Nem tölt be az adat | Győződj meg róla, hogy a backend fut és elérhető |
 | Nem tudok feltölteni zenét | Ellenőrizd az internetkapcsolatot, illetve a REST API válaszokat |
+
+
+## Fejlesztői dokumentáció – Berkrify Admin
+
+Ez a dokumentáció segít a Berkrify Admin alkalmazás fejlesztésében, karbantartásában és továbbfejlesztésében.
+
+---
+
+### Áttekintés
+
+A **Berkrify Admin** egy JavaFX alapú asztali alkalmazás, amely egy háttérrendszerhez (REST API) csatlakozik, hogy admin funkciókat biztosítson a Berkrify zenelejátszó rendszerhez.
+
+Az alkalmazás egy **MVC + Service** architektúrát követ:
+
+- **Model** osztályok: az adatbázisban lévő entitásokat (pl. felhasználók, lejátszási listák, zenék) reprezentálják Java objektumok formájában.
+- **View** réteg: FXML fájlokból áll, ezek határozzák meg az egyes képernyők megjelenését és elrendezését.
+- **Controller** osztályok: ezek kezelik a felhasználói interakciókat, eseményeket és a megjelenítés mögötti üzleti logikát.
+- **Service** réteg: felelős a REST API-val való kommunikációért, és hidat képez a vezérlők és a háttérrendszer között.
+
+Ez a struktúra jól szétválasztja az alkalmazás felelősségi köreit, karbantarthatóvá és jól bővíthetővé téve a projektet.
+
+
+---
+
+### Technológiai stack
+
+- **Java 17+**
+- **JavaFX** – GUI fejlesztéshez
+- **FXML** – felhasználói felületek deklarálása
+- **HttpClient** – REST API kommunikáció
+- **Maven** – build és függőségkezelés
+- **JUnit** – tesztelés
+
+---
+
+### Projekt struktúra
+
+- `src/main/java` – fő Java forráskód
+  - `controller` – FXML-hez kapcsolódó vezérlőosztályok
+  - `model` – adatok modellezése (pl. User, Playlist)
+  - `service` – REST kommunikáció
+- `src/main/resources` – FXML fájlok és statikus erőforrások
+- `src/test/java` – tesztosztályok
+- `pom.xml` – Maven konfiguráció
+
+---
+
+### Fejlesztési környezet beállítása
+
+#### 1. Függőségek telepítése
+
+A projekt Maven alapú, így elegendő:
+
+```bash
+mvn clean install
+```
+
+#### 2. Futtatás IDE-ből
+
+- Nyisd meg a projektet IntelliJ IDEA-ban
+- Jobb klikk a `main` metódust tartalmazó osztályon (pl. `Main.java`)
+- Futtatás (Run)
+
+#### 3. REST API URL
+
+A REST API címe jelenleg be van égetve a kódban, a `BaseService` osztályban
+
+---
+
+### REST API kommunikáció
+
+Az alkalmazás `HttpClient` segítségével küld HTTP kéréseket a backendhez. A hívások JSON válaszokat várnak, amelyeket Java objektumokká alakít.
+
+Példa lekérdezés:
+
+```java
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("http://localhost:3000/users"))
+    .GET()
+    .build();
+```
