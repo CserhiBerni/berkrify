@@ -24,7 +24,7 @@ npm install
 ### 3. .env fájl létrehozása
  
 ```bash
-DATABASE_URL="mysql://root@localhost:3306/berkrify"
+DATABASE_URL="mysql://root@localhost:3306/songs"
 ```
 ```bash
 npx prisma generate
