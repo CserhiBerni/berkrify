@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="BerkrifyAdmin" Language="1033" Version="1.0.5" Manufacturer="YourName" UpgradeCode="13ffcb6b-ac0c-4df3-940d-ba065405212e">
+    <Package InstallerVersion="500" Compressed="yes" Comments="Windows Installer Package"/>
+
+    <Media Id="1" Cabinet="sample.cab" EmbedCab="yes"/>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="BerkrifyAdmin">
+          <Component Id="MainExecutable" Guid="0c4bf1bf-1d98-42e4-9ca3-7282dcd1985e">
+            <File Id="BerkrifyAdminExe" Source="C:\Users\gaspa\Desktop\berkrify-desktop\berkrify\berkrify\BerkrifyAdmin-1.0.5.exe"/>
+          </Component>
+
+          <Component Id="JavaFXLib" Guid="3267231e-e139-4482-a841-2ea45a970400">
+            <File Id="JavaFXControls" Source="C:\javafx-sdk-17.0.15\lib\javafx.controls.jar"/>
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="Main Feature" Level="1">
+      <ComponentRef Id="MainExecutable"/>
+      <ComponentRef Id="JavaFXLib"/>
+    </Feature>
+  </Product>
+</Wix>
