@@ -1,4 +1,4 @@
-## Felhasználói dokumentáció – Berkrify Admin
+# Felhasználói dokumentáció – Berkrify Admin
 
 Ez az alkalmazás a Berkrify rendszer adminisztrációs felülete, amely lehetővé teszi a felhasználók és zenék kezelését, statisztikák kivonását admin jogosultságú felhasználók számára. A felület asztali alkalmazásként működik JavaFX alapokon.
 
@@ -77,7 +77,7 @@ java -jar berkrify-admin.jar
 | Nem tudok feltölteni zenét | Ellenőrizd az internetkapcsolatot, illetve a REST API válaszokat |
 
 
-## Fejlesztői dokumentáció – Berkrify Admin
+# Fejlesztői dokumentáció – Berkrify Admin
 
 Ez a dokumentáció segít a Berkrify Admin alkalmazás fejlesztésében, karbantartásában és továbbfejlesztésében.
 
@@ -122,26 +122,21 @@ Ez a struktúra jól szétválasztja az alkalmazás felelősségi köreit, karba
 
 ---
 
-### Fejlesztési környezet beállítása
+### Telepítés
 
-#### 1. Függőségek telepítése
+A projekt futtatásához Java 17+ és Maven szükséges. A lépések a következők:
 
-A projekt Maven alapú, így elegendő:
+1. Klónozd vagy töltsd le a projektet
+2. Nyisd meg IDE-ben vagy terminálban
+3. Telepítsd a függőségeket:
+   ```bash
+   mvn install
+   ```
+4. Indítsd a JavaFX alkalmazást (pl. Main osztályból)
 
-```bash
-mvn clean install
-```
+Backend elérhetősége: `http://localhost:3000` (ezt a `BaseService` használja REST hívásokhoz)
 
-#### 2. Futtatás IDE-ből
-
-- Nyisd meg a projektet IntelliJ IDEA-ban
-- Jobb klikk a `main` metódust tartalmazó osztályon (pl. `Main.java`)
-- Futtatás (Run)
-
-#### 3. REST API URL
-
-A REST API címe jelenleg be van égetve a kódban, a `BaseService` osztályban
-
+Az applikáció windowsra való telepítéséhez vagy a legfrissebb exe fájl indítása szolgál, vagy az msi fájl indítása a gyökérkönyvtárban
 ---
 
 ### REST API kommunikáció
@@ -156,3 +151,78 @@ HttpRequest request = HttpRequest.newBuilder()
     .GET()
     .build();
 ```
+
+
+# Tesztelési dokumentáció – Berkrify JavaFX alkalmazás
+
+## Tesztelt komponensek
+- JavaFX kontrollerek (Controller osztályok)
+- Szolgáltatásréteg (Service osztályok REST kommunikációval)
+
+---
+
+## 1. Kontrollerek tesztelése
+
+### ✅ SongControllerTest
+- Teszteli, hogy a dalok a `SongService.getSongs()` mockolt válasza alapján helyesen betöltődnek
+- A `songData` ObservableList frissülése ellenőrzött
+- A `songService`, `songsTable` és többi @FXML mező reflection segítségével került beállításra
+- JavaFX platform inicializálás `JavaFXInitializer.initialize()` segítségével
+
+### ✅ UserControllerTest
+- Teszteli, hogy a `UserService.getUsers()` által visszaadott felhasználók betöltődnek
+- A `userData` ObservableList állapotát ellenőrizzük
+- A `searchField` mező manuálisan beállítva, mivel @FXML
+
+### ✅ LoginControllerTest
+- Teszteli, hogy az `AuthService.login()` sikeres válasz esetén betölti a dashboardot
+- Sikertelen login esetén `AlertWindow.showAlert()` hívódik meg
+- A `emailField`, `passwordField`, `errorLabel` mezők kézzel beállítva
+
+---
+
+## 2. Service osztályok tesztelése
+
+### ✅ AuthServiceTest
+- `login()` sikeres válasz: token és userId frissül a Session-ben
+- `login()` hibás válasz: kivételt dob
+- `register()` sikeres és sikertelen hívás tesztelve
+- Minden HTTP kommunikáció mockolt HttpClient segítségével történt
+
+### ✅ SongServiceTest
+- `getSongs()` DTO-ból modell konverzió tesztelve
+- `deleteSong(id)` és `updateSong(song)` metódusok helyes státuszkódok alapján értékelve
+
+### ✅ UserServiceTest
+- `fetchUserProfile(id)` sikeres és hibás válasz kezelése
+- `getUsers()` DTO-k listájából JavaFX `User` példányok készülnek
+- `deleteUser(id)` sikeres és hibás válasz alapján ellenőrizve
+
+---
+
+## Tesztelési technikák
+
+- **JUnit 5**: fő tesztkeretrendszer
+- **Mockito**: `HttpClient`, `HttpResponse`, és Service osztályok mockolásához
+- **Reflection API**: privát mezők (pl. FXML-ek) injektálása a controller tesztekhez
+- **JavaFX Platform.startup()**: egyszeri inicializálás minden JavaFX-teszt előtt
+- **ObjectMapper**: JSON ↔ DTO konverziók teszteléséhez
+
+---
+
+## Tesztlefedettség
+
+| Komponens         | Metódusok                     | Tesztelve | Megjegyzés                         |
+|-------------------|-------------------------------|-----------|-----------------------------------|
+| SongController     | initialize(), loadSongs       | ✅         | GUI + adat betöltés              |
+| UserController     | initialize(), loadUsers       | ✅         | GUI + keresőmező + adatlista     |
+| LoginController    | handleLogin()                 | ✅         | Sikeres + hibás login            |
+| AuthService        | login(), register()           | ✅         | Session + JSON kezelés           |
+| SongService        | getSongs(), update, delete    | ✅         | DTO-konverzió + státuszkódok     |
+| UserService        | profile, list, delete         | ✅         | Tokenes lekérés + konverzió      |
+
+---
+
+## Összefoglalás
+
+A tesztek átfogóan lefedik a Berkrify JavaFX admin alkalmazás fő komponenseit. A controller osztályok megfelelően lettek izolálva és unit tesztelve reflection segítségével, míg a Service rétegben minden HTTP kommunikáció mock környezetben lett validálva. A tesztek biztosítják, hogy az alkalmazás helyesen reagál mind pozitív, mind negatív REST válaszokra, miközben a GUI réteg működését is szimulálják JavaFX környezetben. A projekt megfelel egy jól struktúrált, Layered MVC architektúrának.
