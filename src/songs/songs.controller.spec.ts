@@ -1,20 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SongsController } from './songs.controller';
-import { SongsService } from './songs.service';
+import { INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
+import { AppModule } from '../app.module';
 
-describe('SongsController', () => {
-  let controller: SongsController;
+describe('SongsController (e2e)', () => {
+  let app: INestApplication;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [SongsController],
-      providers: [SongsService],
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
 
-    controller = module.get<SongsController>(SongsController);
+    app = moduleFixture.createNestApplication();
+    await app.init();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('should get all songs', async () => {
+    const response = await request(app.getHttpServer()).get('/songs');
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 });

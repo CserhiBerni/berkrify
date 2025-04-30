@@ -1,20 +1,52 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PlaylistController } from './playlist.controller';
-import { PlaylistService } from './playlist.service';
+import { INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
+import { AppModule } from '../app.module';
 
-describe('PlaylistController', () => {
-  let controller: PlaylistController;
+describe('PlaylistController (e2e)', () => {
+  let app: INestApplication;
+  let token: string;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [PlaylistController],
-      providers: [PlaylistService],
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
 
-    controller = module.get<PlaylistController>(PlaylistController);
+    app = moduleFixture.createNestApplication();
+    await app.init();
+
+    await request(app.getHttpServer())
+      .post('/user/register')
+      .send({
+        name: 'TestUser',
+        email: 'testuser@example.com',
+        password: 'Teszt123!',
+      });
+
+    const loginRes = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({
+        email: 'testuser@example.com',
+        password: 'Teszt123!',
+      });
+
+    token = loginRes.body.access_token;
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('should create a new playlist', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/playlists')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'My Test Playlist',
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('id');
+    expect(response.body.name).toBe('My Test Playlist');
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });
