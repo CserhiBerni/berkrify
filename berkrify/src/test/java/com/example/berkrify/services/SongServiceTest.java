@@ -44,7 +44,6 @@ public class SongServiceTest {
 
   @Test
   public void testGetSongs_successful() throws Exception {
-    // Arrange
     SongDto dto = new SongDto();
     dto.setId(1);
     dto.setArtist("Test Artist");
@@ -55,8 +54,6 @@ public class SongServiceTest {
     dto.setGenre("Pop");
     dto.setMp3("test.mp3");
     dto.setCover("cover.jpg");
-    dto.setPlayCount(5);
-    dto.setLastPlayed("2024-01-01");
     dto.setCreatedAt("2024-01-01");
 
     String jsonResponse = objectMapper.writeValueAsString(List.of(dto));
@@ -112,7 +109,7 @@ public class SongServiceTest {
   @Test
   public void testUpdateSong_successful() throws Exception {
     Song song = new Song(1, "Artist", "Album", "Song", 200, 2020, "Rock",
-        "file.mp3", "cover.jpg", 10, "2024-04-01", "2024-04-01");
+        "file.mp3", "cover.jpg", "2024-04-01");
 
     HttpResponse<String> mockResponse = mock(HttpResponse.class);
     when(mockResponse.statusCode()).thenReturn(200);
@@ -126,7 +123,7 @@ public class SongServiceTest {
   @Test
   public void testUpdateSong_failure_throwsException() throws Exception {
     Song song = new Song(1, "Artist", "Album", "Song", 200, 2020, "Rock",
-        "file.mp3", "cover.jpg", 10, "2024-04-01", "2024-04-01");
+        "file.mp3", "cover.jpg", "2024-04-01");
 
     HttpResponse<String> mockResponse = mock(HttpResponse.class);
     when(mockResponse.statusCode()).thenReturn(500);

@@ -13,12 +13,10 @@ public class Song {
   private final SimpleStringProperty genre;
   private final SimpleStringProperty mp3;
   private final SimpleStringProperty cover;
-  private final SimpleIntegerProperty playCount;
-  private final SimpleStringProperty lastPlayed;
   private final SimpleStringProperty createdAt;
 
 
-  public Song(int id, String artist, String album, String song, int length, int releaseYear, String genre, String mp3, String cover, int playCount, String lastPlayed, String createdAt) {
+  public Song(int id, String artist, String album, String song, int length, int releaseYear, String genre, String mp3, String cover, String createdAt) {
     this.id = new SimpleIntegerProperty(id);
     this.artist = new SimpleStringProperty(artist);
     this.album = new SimpleStringProperty(album);
@@ -28,8 +26,6 @@ public class Song {
     this.genre = new SimpleStringProperty(genre);
     this.mp3 = new SimpleStringProperty(mp3);
     this.cover = new SimpleStringProperty(cover);
-    this.playCount = new SimpleIntegerProperty(playCount);
-    this.lastPlayed = new SimpleStringProperty(lastPlayed);
     this.createdAt = new SimpleStringProperty(createdAt);
   }
 
@@ -103,22 +99,6 @@ public class Song {
 
   public SimpleStringProperty coverProperty() {
     return cover;
-  }
-
-  public int getPlayCount() {
-    return playCount.get();
-  }
-
-  public SimpleIntegerProperty playCountProperty() {
-    return playCount;
-  }
-
-  public String getLastPlayed() {
-    return lastPlayed.get();
-  }
-
-  public SimpleStringProperty lastPlayedProperty() {
-    return lastPlayed;
   }
 
   public String getCreatedAt() {

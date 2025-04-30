@@ -12,10 +12,6 @@ public class UpdateSongDto {
   private String genre;
   private String mp3;
   private String cover;
-  @JsonProperty("play_count")
-  private int playCount;
-  @JsonProperty("last_played")
-  private String lastPlayed;
   @JsonProperty("created_at")
   private String createdAt;
 
@@ -83,22 +79,6 @@ public class UpdateSongDto {
 
   public void setCover(String cover) {
     this.cover = cover;
-  }
-
-  public int getPlayCount() {
-    return playCount;
-  }
-
-  public void setPlayCount(int playCount) {
-    this.playCount = playCount;
-  }
-
-  public String getLastPlayed() {
-    return lastPlayed;
-  }
-
-  public void setLastPlayed(String lastPlayed) {
-    this.lastPlayed = lastPlayed;
   }
 
   public String getCreatedAt() {

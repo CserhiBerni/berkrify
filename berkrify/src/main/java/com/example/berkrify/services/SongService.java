@@ -41,8 +41,6 @@ public class SongService extends BaseService {
             dto.getGenre(),
             dto.getMp3(),
             dto.getCover(),
-            dto.getPlayCount(),
-            dto.getLastPlayed(),
             dto.getCreatedAt()
         ));
       }
@@ -74,8 +72,6 @@ public class SongService extends BaseService {
     dto.setGenre(song.getGenre());
     dto.setMp3(song.getMp3());
     dto.setCover(song.getCover());
-    dto.setPlayCount(song.getPlayCount());
-    dto.setLastPlayed(song.getLastPlayed());
     dto.setCreatedAt(song.getCreatedAt());
 
     String jsonData = getObjectMapper().writeValueAsString(dto);

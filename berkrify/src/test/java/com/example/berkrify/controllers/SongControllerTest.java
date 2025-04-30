@@ -48,7 +48,7 @@ public class SongControllerTest {
   @Test
   public void testSongDataLoaded() throws Exception {
     Song song = new Song(1, "Artist A", "Album A", "Title A", 180,
-        2022, "Pop", "a.mp3", "cover.jpg", 5, "2024-04-01", "2024-04-01");
+        2022, "Pop", "a.mp3", "cover.jpg", "2024-04-01");
     when(songServiceMock.getSongs()).thenReturn(List.of(song));
 
     controller.initialize();

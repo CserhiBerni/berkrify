@@ -32,8 +32,6 @@ public class CSVExporter {
             "\"" + song.getGenre() + "\"," +
             "\"" + song.getMp3() + "\"," +
             "\"" + song.getCover() + "\"," +
-            song.getPlayCount() + "," +
-            "\"" + (song.getLastPlayed() == null ? "" : song.getLastPlayed()) + "\"," +
             "\"" + song.getCreatedAt() + "\"";
         writer.write(line);
         writer.newLine();

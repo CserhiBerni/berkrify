@@ -58,7 +58,7 @@ public class SongEditController {
     String mp3 = mp3Field.getText();
     String cover = coverField.getText();
 
-    Song updatedSong = new Song(song.getId(), artist, album, songTitle, length, releaseYear, genre, mp3, cover, song.getPlayCount(), song.getLastPlayed(), song.getCreatedAt());
+    Song updatedSong = new Song(song.getId(), artist, album, songTitle, length, releaseYear, genre, mp3, cover, song.getCreatedAt());
 
     Task<Void> updateTask = new Task<>() {
       @Override
