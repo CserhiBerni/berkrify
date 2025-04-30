@@ -8,16 +8,16 @@ async function main() {
   await prisma.user.createMany({
     data: [
       {
-        name: 'Admin bácsi',
+        name: 'Admin',
         email: 'admin@example.com',
-        password: await argon2.hash('admin'),
+        password: await argon2.hash('admin123!'),
         created: new Date(),
         role: 'Admin',
       },
       {
-        name: 'User néni',
+        name: 'User',
         email: 'user@example.com',
-        password: await argon2.hash('user'),
+        password: await argon2.hash('user123!'),
         created: new Date(),
         role: 'User',
       },

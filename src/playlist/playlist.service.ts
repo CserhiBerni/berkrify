@@ -51,22 +51,42 @@ export class PlaylistService {
     });
 
     if (existingLikedPlaylists.length === 0) {
-      return this.prisma.playlist.create({
-        data: {
-          name: "Liked Songs",
-          description: "Songs you've liked",
-          user: {
-            connect: { id: userId }
-          }
-        },
-        include: {
-          songs: {
-            include: {
-              song: true
+      try {
+        return await this.prisma.playlist.create({
+          data: {
+            name: "Liked Songs",
+            description: "Songs you've liked",
+            user: {
+              connect: { id: userId }
+            }
+          },
+          include: {
+            songs: {
+              include: {
+                song: true
+              }
             }
           }
+        });
+      } catch (error) {
+        if (error.code === 'P2002') {
+          const playlist = await this.prisma.playlist.findFirst({
+            where: {
+              user_id: userId,
+              name: "Liked Songs"
+            },
+            include: {
+              songs: {
+                include: {
+                  song: true
+                }
+              }
+            }
+          });
+          if (playlist) return playlist;
         }
-      });
+        throw error;
+      }
     }
 
     if (existingLikedPlaylists.length === 1) {
