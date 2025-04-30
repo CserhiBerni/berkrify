@@ -46,8 +46,10 @@ npm run dev
   - megállíthatod
   - léptetheted
   - ismételheted a számokat
+  - szabályozhatod a szám hangerejét
 - A `+` ikonra kattintva a saját lejátszási listáidba adhatod a dalokat.
 - A ❤️ ikonra kattintva a **Liked Songs** listába kerülnek.
+- A hangerő ikonra kattintva, könnyedén elnémíthatod a számot, míg némítás után ismét hallhatóvá teheted klikkeléssel.
 - A lejátszó tartalmazza a borítóképet és a dal információit.
 - A borítóra kattintva nagy méretben jelenik meg zenéd fotója, kiírva információit is.
 - A jobb felső sarokban lévő ikon segítségével a lejátszó összecsukható, majd újra megnyitható.
