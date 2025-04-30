@@ -16,7 +16,7 @@ export class PlaylistService {
     if (createPlaylistDto.name === "Liked Songs") {
       return this.ensureLikedSongsPlaylistExists(createPlaylistDto.user_id);
     }
-  
+
     return await this.prisma.playlist.create({
       data: {
         name: createPlaylistDto.name,
@@ -31,7 +31,7 @@ export class PlaylistService {
       }
     });
   }
-  
+
   async ensureLikedSongsPlaylistExists(userId: number) {
     const existingLikedPlaylists = await this.prisma.playlist.findMany({
       where: {
@@ -42,9 +42,6 @@ export class PlaylistService {
         songs: {
           include: {
             song: true
-          },
-          orderBy: {
-            position: 'asc'
           }
         }
       },
@@ -66,9 +63,6 @@ export class PlaylistService {
           songs: {
             include: {
               song: true
-            },
-            orderBy: {
-              position: 'asc'
             }
           }
         }
@@ -80,7 +74,7 @@ export class PlaylistService {
     }
 
     const [keepPlaylist, ...duplicatesToRemove] = existingLikedPlaylists;
-    
+
     for (const duplicatePlaylist of duplicatesToRemove) {
       for (const playlistSong of duplicatePlaylist.songs) {
         const songExists = keepPlaylist.songs.some(ps => ps.song_id === playlistSong.song_id);
@@ -89,18 +83,17 @@ export class PlaylistService {
           await this.prisma.playlistSong.create({
             data: {
               playlist_id: keepPlaylist.id,
-              song_id: playlistSong.song_id,
-              position: playlistSong.position
+              song_id: playlistSong.song_id
             }
           });
         }
       }
-      
+
       try {
         await this.prisma.playlistSong.deleteMany({
           where: { playlist_id: duplicatePlaylist.id }
         });
-        
+
         await this.prisma.playlist.delete({
           where: { id: duplicatePlaylist.id }
         });
@@ -108,7 +101,7 @@ export class PlaylistService {
         console.error(`Error deleting duplicate Liked Songs playlist ${duplicatePlaylist.id}:`, error);
       }
     }
-    
+
     return keepPlaylist;
   }
 
@@ -117,13 +110,10 @@ export class PlaylistService {
       where: { playlist_id: playlistId },
       include: {
         song: true
-      },
-      orderBy: {
-        position: 'asc'
       }
     });
   }
-  
+
   async findAll() {
     return await this.prisma.playlist.findMany({
       include: {
@@ -138,7 +128,7 @@ export class PlaylistService {
 
   async findUserPlaylists(userId: number) {
     await this.ensureLikedSongsPlaylistExists(userId);
-    
+
     return await this.prisma.playlist.findMany({
       where: {
         user_id: userId
@@ -147,9 +137,6 @@ export class PlaylistService {
         songs: {
           include: {
             song: true
-          },
-          orderBy: {
-            position: 'asc'
           }
         }
       }
@@ -163,9 +150,6 @@ export class PlaylistService {
         songs: {
           include: {
             song: true
-          },
-          orderBy: {
-            position: 'asc'
           }
         }
       }
@@ -210,11 +194,7 @@ export class PlaylistService {
     });
 
     if (existingSong) {
-      return await this.prisma.playlistSong.update({
-        where: { id: existingSong.id },
-        data: { position: addSongDto.position },
-        include: { song: true }
-      });
+      return existingSong;
     }
 
     return await this.prisma.playlistSong.create({
@@ -224,8 +204,7 @@ export class PlaylistService {
         },
         song: {
           connect: { id: addSongDto.song_id }
-        },
-        position: addSongDto.position
+        }
       },
       include: { song: true }
     });
@@ -252,11 +231,11 @@ export class PlaylistService {
     const playlist = await this.prisma.playlist.findUnique({
       where: { id }
     });
-    
+
     if (playlist && playlist.name === "Liked Songs") {
       throw new Error("Cannot delete the 'Liked Songs' playlist");
     }
-    
+
     return await this.prisma.playlist.delete({
       where: { id }
     });

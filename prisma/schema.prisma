@@ -23,17 +23,9 @@ model songs {
     genre      String
     mp3        String  
     cover  String
-    play_count  Int          @default(0)
-    last_played DateTime?
     created_at  DateTime     @default(now())
     favorites   favorites[] 
     playlist_songs PlaylistSong[]
-    play_history PlayHistory[] 
-}
-
-model genre {
-    id    Int    @id @default(autoincrement())
-    genre String
 }
 
 model favorites {
@@ -55,7 +47,6 @@ model user {
     role Role
     tokens Token[]
     playlists  Playlist[]
-    play_history PlayHistory[]
 }
 
 model Playlist {
@@ -77,18 +68,8 @@ model PlaylistSong {
   playlist_id Int
   song_id     Int
   added_at    DateTime  @default(now())
-  position    Int
   playlist    Playlist  @relation(fields: [playlist_id], references: [id], onDelete: Cascade)
   song        songs     @relation(fields: [song_id], references: [id], onDelete: Cascade)
-}
-
-model PlayHistory {
-  id        Int      @id @default(autoincrement())
-  user_id   Int
-  song_id   Int
-  played_at DateTime @default(now())
-  user      user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  song      songs    @relation(fields: [song_id], references: [id], onDelete: Cascade)
 }
 
 enum Role {

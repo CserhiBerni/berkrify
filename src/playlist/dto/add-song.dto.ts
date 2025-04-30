@@ -8,11 +8,4 @@ export class AddSongDto {
     description: 'ID of the song'
   })
   song_id: number;
-
-  @IsInt()
-  @ApiProperty({
-    example: 1,
-    description: 'Position of the song in the playlist'
-  })
-  position: number;
 }
