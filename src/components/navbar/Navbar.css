@@ -2,25 +2,20 @@
  
 body {
   margin: 0;
-  padding: 0;
   font-family: 'Poppins', sans-serif;
   background-color: #fcfcfc;
 }
  
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: rgba(56, 48, 98, 0.553);
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: var(--navbar-height);
+  background-color: rgba(56, 48, 98);
+  z-index: 999;
+  backdrop-filter: blur(8px);
 }
- 
-.brand-logo {
-  height: 40px;
-  width: auto;
-}
- 
+
 .navbar-left, .navbar-center, .navbar-right {
   display: flex;
   align-items: center;
@@ -40,7 +35,7 @@ body {
   height: 60px;
   max-width: 80px;
   max-height: 80px;
-  transition: transform 0.1s linear;
+  transition: transform 0.2s ease;
 }
  
 .brl:hover {
@@ -61,16 +56,23 @@ body {
 .navbar-nav .nav-link {
   position: relative;
   text-decoration: none;
-  color: black;
-  padding-bottom: 0.2vh;
+  color: white;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
- 
+
 .navbar-nav .nav-link:hover {
-  color: rgb(92, 96, 133) !important;
+  color: rgb(117, 86, 240) !important;
+  background-color: rgba(255, 255, 255, 0.1);
 }
- 
+
 .navbar-nav .nav-link.active {
-  color: rgb(51, 40, 106) !important;
+  color: rgb(117, 86, 240) !important;
 }
  
 .navbar-nav .nav-link::after {
@@ -125,15 +127,15 @@ body {
  
 .mobile-menu {
   position: fixed;
+  margin-top: 15px;
   top: 65px;
   left: 0;
   width: 100%;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.877);
   padding: 1rem;
   border-radius: 0;
   text-align: center;
   z-index: 1000;
-  box-shadow: 0px 5px 10px rgb(29, 2, 57);
 }
  
  
@@ -243,5 +245,25 @@ body {
 @media (min-width: 769px) {
   .mobile-menu {
     display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .search-bar-container {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    display: flex !important;
+    justify-content: center;
+    margin: 0;
+    padding: 0 1rem;
+  }
+  .search-bar-container.show-search {
+    position: static;
+    transform: none;
+  }
+  .navbar .container-fluid {
+    justify-content: space-between;
   }
 }

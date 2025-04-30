@@ -12,15 +12,16 @@ import { PlaylistProvider } from "./components/services/service/PlaylistContext"
 import PlaylistPage from "./pages/playlist/PlaylistPage";
 import PlaylistsPage from "./pages/playlist/Playlists";
 import ProfilePage from "./pages/profile/ProfilePage";
+import CreatePlaylist from "./pages/playlist/CreatePlaylist"; 
 
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const isAdmin = user?.role?.toLowerCase() === "admin";
-
+  const isAdmin = user?.role === "admin";
+  
   if (!isAdmin) {
     return <Navigate to="/login" replace />;
   }
-
+  
   return <>{children}</>;
 };
 
@@ -65,6 +66,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProfilePage />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/playlists/create",
+    element: (
+      <ProtectedRoute>
+        <CreatePlaylist />
       </ProtectedRoute>
     )
   },

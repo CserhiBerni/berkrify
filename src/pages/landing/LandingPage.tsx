@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/Navbar";
-//import SearchResults from "../../components/navbar/SearchResults";
+import SearchResults from "../../components/navbar/SearchResults";
 import MusicList from "../../components/musiclist/MusicList";
 import MusicPlayer from "../../components/musicplayer/MusicPlayer";
 import { Song } from "../../components/services/class/types";
@@ -27,6 +27,7 @@ const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
     <Navbar onSearch={(query) => setSearchTerm(query)}/>
+      {searchTerm && <SearchResults searchTerm={searchTerm} onPlay={handlePlaySong} />}
       <MusicList onPlay={handlePlaySong} />
       {currentSong && (
         <div className="music-player-container">

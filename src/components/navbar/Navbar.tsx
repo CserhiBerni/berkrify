@@ -20,14 +20,6 @@ interface NavbarProps {
   showSearch?: boolean;
 }
 
-interface LoggedInUser {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  [key: string]: any;
-}
-
 const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch }) => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -47,11 +39,13 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
+
     setIsLoggedIn(!!token);
+
     if (user) {
       try {
-        const userData: LoggedInUser = JSON.parse(user);
-        setIsAdmin(userData.role?.toLowerCase() === "admin");
+        const userData = JSON.parse(user);
+        setIsAdmin(userData.role === "admin");
       } catch (e) {
         console.error("Error parsing user data", e);
       }
@@ -61,11 +55,18 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (scrollPosition > 30) setScrolled(true);
-      else setScrolled(false);
+      if (scrollPosition > 30) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -98,8 +99,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("likedSongs");
+
     setIsLoggedIn(false);
     setIsAdmin(false);
+
     window.location.href = "/login";
   };
 
@@ -184,20 +187,31 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
               <TiHomeOutline size={iconSize} />
             </NavLink>
           </li>
+
           <li className="nav-item">
-            <NavLink className={getNavLinkClass} to={isLoggedIn ? "/playlists" : "/login"} onClick={handlePlaylistClick} end>
+            <NavLink
+              className={getNavLinkClass}
+              to={isLoggedIn ? "/playlists" : "/login"}
+              onClick={handlePlaylistClick}
+              end
+            >
               <MdOutlineLibraryMusic size={iconSize} />
             </NavLink>
           </li>
+
           <li className="nav-item">
             <NavLink
-              className={({ isActive }) => window.location.pathname === "/playlists/create" ? "nav-link active" : "nav-link"}
+              className={({ isActive }) => {
+                const exactMatch = window.location.pathname === "/playlists/create";
+                return exactMatch ? "nav-link active" : "nav-link";
+              }}
               to={isLoggedIn ? "/playlists/create" : "/login"}
               onClick={handlePlaylistClick}
             >
               <MdPlaylistAdd size={iconSize} />
             </NavLink>
           </li>
+
           {isLoggedIn ? (
             <>
               <li className="nav-item">
@@ -239,35 +253,66 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
         <div className="mobile-menu">
           <ul className="mobile-menu-list">
             <li>
-              <NavLink className={getNavLinkClass} to="/" onClick={handleShowNavbar} end>
+              <NavLink
+                className={getNavLinkClass}
+                to="/"
+                onClick={handleShowNavbar}
+                end
+              >
                 Home
               </NavLink>
             </li>
+
             <li>
-              <NavLink className={getNavLinkClass} to={isLoggedIn ? "/playlists" : "/login"} onClick={(e) => { handleShowNavbar(); !isLoggedIn && handlePlaylistClick(e); }} end>
+              <NavLink
+                className={getNavLinkClass}
+                to={isLoggedIn ? "/playlists" : "/login"}
+                onClick={(e) => { handleShowNavbar(); !isLoggedIn && handlePlaylistClick(e); }}
+                end
+              >
                 My Playlists
               </NavLink>
             </li>
             <li>
-              <NavLink className={({ isActive }) => window.location.pathname === "/playlists/create" ? "nav-link active" : "nav-link"} to={isLoggedIn ? "/playlists/create" : "/login"} onClick={(e) => { handleShowNavbar(); !isLoggedIn && handlePlaylistClick(e); }}>
+              <NavLink
+                className={({ isActive }) => {
+                  const exactMatch = window.location.pathname === "/playlists/create";
+                  return exactMatch ? "nav-link active" : "nav-link";
+                }}
+                to={isLoggedIn ? "/playlists/create" : "/login"}
+                onClick={(e) => { handleShowNavbar(); !isLoggedIn && handlePlaylistClick(e); }}
+              >
                 Create Playlist
               </NavLink>
             </li>
+
             {isLoggedIn ? (
               <>
                 <li>
-                  <NavLink className={getNavLinkClass} to="/profile" onClick={handleShowNavbar}>
+                  <NavLink
+                    className={getNavLinkClass}
+                    to="/profile"
+                    onClick={handleShowNavbar}
+                  >
                     Profile
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="nav-link" to="/" onClick={() => { handleShowNavbar(); handleLogout(); }}>
+                  <NavLink
+                    className="nav-link"
+                    to="/"
+                    onClick={() => { handleShowNavbar(); handleLogout(); }}
+                  >
                     Log out
                   </NavLink>
                 </li>
                 {isAdmin && (
                   <li>
-                    <NavLink className={getNavLinkClass} to="/upload" onClick={handleShowNavbar}>
+                    <NavLink
+                      className={getNavLinkClass}
+                      to="/upload"
+                      onClick={handleShowNavbar}
+                    >
                       Upload Form
                     </NavLink>
                   </li>
@@ -276,12 +321,20 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
             ) : (
               <>
                 <li>
-                  <NavLink className={getNavLinkClass} to="/login" onClick={handleShowNavbar}>
+                  <NavLink
+                    className={getNavLinkClass}
+                    to="/login"
+                    onClick={handleShowNavbar}
+                  >
                     Login
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className={getNavLinkClass} to="/register" onClick={handleShowNavbar}>
+                  <NavLink
+                    className={getNavLinkClass}
+                    to="/register"
+                    onClick={handleShowNavbar}
+                  >
                     Register
                   </NavLink>
                 </li>
@@ -297,35 +350,40 @@ const Navbar: React.FC<NavbarProps> = ({ onSearch, showSearch: propShowSearch })
         </div>
       )}
 
-      <style>{`
-        .playlist-login-message {
-          position: fixed;
-          top: 70px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: rgba(0, 0, 0, 0.8);
-          color: white;
-          padding: 10px 20px;
-          border-radius: 5px;
-          z-index: 1000;
-          font-size: 14px;
-          animation: fadeInOut 3s forwards;
-        }
-        @keyframes fadeInOut {
-          0% { opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { opacity: 0; }
-        }
-        .navbar {
-          transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
-          background-color: rgba(56, 48, 98, 1);
-        }
-        .navbar-scrolled {
-          background-color: rgba(56, 48, 98, 0.7);
-          backdrop-filter: blur(8px);
-        }
-      `}</style>
+      <style>
+        {`
+          .playlist-login-message {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-size: 14px;
+            animation: fadeInOut 3s forwards;
+          }
+          
+          @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+          
+          .navbar {
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+            background-color: rgba(56, 48, 98, 1);
+          }
+          
+          .navbar-scrolled {
+            background-color: rgba(56, 48, 98, 0.7);
+            backdrop-filter: blur(8px);
+          }
+        `}
+      </style>
     </nav>
   );
 };

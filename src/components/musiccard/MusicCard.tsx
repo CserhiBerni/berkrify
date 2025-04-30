@@ -14,10 +14,7 @@ const MusicCard: React.FC<MusicCardProps> = ({ song, onPlay }) => {
     const titleContainerRef = useRef<HTMLDivElement>(null);
     const artistRef = useRef<HTMLDivElement>(null);
     const artistContainerRef = useRef<HTMLDivElement>(null);
-    const albumRef = useRef<HTMLDivElement>(null);
-    const albumContainerRef = useRef<HTMLDivElement>(null);
 
-    const [isAlbumScrollable, setIsAlbumScrollable] = useState(false);
     const [isTitleScrollable, setIsTitleScrollable] = useState(false);
     const [isArtistScrollable, setIsArtistScrollable] = useState(false);
     const [averageColor, setAverageColor] = useState("rgba(0, 0, 0, 0.5)");
@@ -52,12 +49,6 @@ const MusicCard: React.FC<MusicCardProps> = ({ song, onPlay }) => {
             setIsArtistScrollable(artistRef.current.scrollWidth > artistContainerRef.current.clientWidth);
         }
     }, [song.song, song.artist]);
-
-    useEffect(() => {
-        if (albumRef.current && albumContainerRef.current) {
-            setIsAlbumScrollable(albumRef.current.scrollWidth > albumContainerRef.current.clientWidth);
-        }
-    }, [song.album]);
 
     function getAverageRGB(imgEl: HTMLImageElement) {
         const blockSize = 5;
@@ -123,19 +114,15 @@ const MusicCard: React.FC<MusicCardProps> = ({ song, onPlay }) => {
                 </div>
 
                 <p>
-                    <div className="scroll-container" ref={albumContainerRef}>
-                        <div className={`scroll-text ${isAlbumScrollable ? "scrollable" : ""}`} ref={albumRef}>
-                            <small>
-                                <Link
-                                    to={`/album/${encodeURIComponent(song.album)}`}
-                                    className="album-link"
-                                    onClick={handleAlbumClick}
-                                >
-                                    {song.album}
-                                </Link> ({song.release_yr})
-                            </small>
-                        </div>
-                    </div>
+                    <small>
+                        <Link
+                            to={`/album/${encodeURIComponent(song.album)}`}
+                            className="album-link"
+                            onClick={handleAlbumClick}
+                        >
+                            {song.album}
+                        </Link> ({song.release_yr})
+                    </small>
                 </p>
                 <p>{song.genre}</p>
                 <p>{Math.floor(song.length / 60)}:{(song.length % 60).toString().padStart(2, "0")}</p>

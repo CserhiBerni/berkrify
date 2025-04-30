@@ -9,7 +9,7 @@ import MusicPlayer from "../../components/musicplayer/MusicPlayer";
 import Navbar from "../../components/navbar/Navbar";
 import { usePlayer } from "../../components/services/service/PlayerContext";
 import { usePlaylists } from "../../components/services/service/PlaylistContext";
-//import "./AlbumPage.css";
+import "./AlbumPage.css";
 
 const AlbumPage: React.FC = () => {
   const { albumName } = useParams<{ albumName: string }>();

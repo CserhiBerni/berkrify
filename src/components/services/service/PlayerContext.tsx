@@ -41,7 +41,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const CURRENT_TIME_KEY = "audio_current_time";
   const PLAYING_STATUS_KEY = "audio_is_playing";
   const audioRef = useRef<HTMLAudioElement>(new Audio());
-
+  
   const resetPlayerState = useCallback(() => {
     setCurrentSong(null);
     setIsPlaying(false);
@@ -64,15 +64,23 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const fetchSongs = async () => {
       try {
         const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+        
         const token = localStorage.getItem("token");
         if (!token) {
           setAllSongs([]);
           return;
         }
+        
         const response = await fetch(`${apiBaseUrl}/songs`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         });
-        if (!response.ok) throw new Error(`API returned ${response.status}`);
+        
+        if (!response.ok) {
+          throw new Error(`API returned ${response.status}`);
+        }
+        
         const data = await response.json();
         setAllSongs(data);
       } catch (error) {
@@ -80,25 +88,33 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setAllSongs([]);
       }
     };
+    
     fetchSongs();
+    
     return () => {
       audioRef.current.pause();
     };
   }, []);
-
+  
   useEffect(() => {
     if (currentSong) {
       const audioSrc = currentSong.audioSrc || currentSong.path;
+      
       if (audioSrc) {
         audioRef.current.src = audioSrc;
         audioRef.current.load();
+        
         if (isPlaying) {
-          audioRef.current.play().catch(err => console.error('Error playing audio:', err));
+          audioRef.current.play().catch(err => {
+            console.error('Error playing audio:', err);
+          });
         }
+      } else {
+        console.error('No audio source found for song:', currentSong);
       }
     }
   }, [currentSong]);
-
+  
   useEffect(() => {
     if (isPlaying) {
       audioRef.current.play().catch(err => {
@@ -109,11 +125,11 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       audioRef.current.pause();
     }
   }, [isPlaying]);
-
+  
   useEffect(() => {
     audioRef.current.volume = volume / 100;
   }, [volume]);
-
+  
   useEffect(() => {
     audioRef.current.muted = isMuted;
   }, [isMuted]);
@@ -122,20 +138,15 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (currentTime > 0) {
       sessionStorage.setItem(CURRENT_TIME_KEY, currentTime.toString());
     }
-  }, [currentTime]);
+  }, [currentTime, CURRENT_TIME_KEY]);
 
   useEffect(() => {
     sessionStorage.setItem(PLAYING_STATUS_KEY, isPlaying.toString());
-  }, [isPlaying]);
+  }, [isPlaying, PLAYING_STATUS_KEY]);
   
   useEffect(() => {
-  }, [loop]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
     const audio = audioRef.current;
+    
     const savedTime = sessionStorage.getItem(CURRENT_TIME_KEY);
     if (savedTime && audio) {
       const timeValue = parseFloat(savedTime);
@@ -144,62 +155,54 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setCurrentTime(timeValue);
       }
     }
-
+    
     const handleTimeUpdate = () => {
       if (audio.currentTime > 0) {
         setCurrentTime(audio.currentTime);
       }
     };
-
+    
     const handleDurationChange = () => {
       setDuration(audio.duration);
     };
-
+    
     const handleEnded = () => {
       if (loop) {
-        setCurrentTime(0);
         audio.currentTime = 0;
         audio.play();
       } else {
         playNextSong();
       }
     };
-
+    
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('durationchange', handleDurationChange);
     audio.addEventListener('ended', handleEnded);
-
+    
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('durationchange', handleDurationChange);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [loop]);
 
   useEffect(() => {
     const handleLogout = () => {
       resetPlayerState();
     };
+
     window.addEventListener('user-logout', handleLogout);
     return () => {
       window.removeEventListener('user-logout', handleLogout);
     };
   }, [resetPlayerState]);
-
+  
   const playNextSong = () => {
     if (!currentSong || allSongs.length === 0) return;
     
-    if (loop) {
-      setCurrentTime(0);
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play().catch(err => console.error('Error playing audio:', err));
-      }
-      return;
-    }
-    
     const currentIndex = allSongs.findIndex(song => song.id === currentSong.id);
     if (currentIndex === -1) return;
+    
     let nextIndex;
     if (shuffle) {
       do {
@@ -208,23 +211,16 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else {
       nextIndex = (currentIndex + 1) % allSongs.length;
     }
+    
     setCurrentSong(allSongs[nextIndex]);
   };
-
+  
   const playPreviousSong = () => {
     if (!currentSong || allSongs.length === 0) return;
     
-    if (loop) {
-      setCurrentTime(0);
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play().catch(err => console.error('Error playing audio:', err));
-      }
-      return;
-    }
-    
     const currentIndex = allSongs.findIndex(song => song.id === currentSong.id);
     if (currentIndex === -1) return;
+    
     let prevIndex;
     if (shuffle) {
       do {
@@ -233,6 +229,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else {
       prevIndex = (currentIndex - 1 + allSongs.length) % allSongs.length;
     }
+    
     setCurrentSong(allSongs[prevIndex]);
   };
 

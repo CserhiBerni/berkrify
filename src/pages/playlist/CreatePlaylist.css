@@ -1,0 +1,415 @@
+.create-playlist-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    color: white;
+    padding-top: var(--navbar-height);
+    margin-top: -51px;
+    box-sizing: border-box;
+}
+
+.create-playlist-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    margin-top: -50px;
+}
+
+.create-playlist-header {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeIn 0.8s ease;
+    padding: 0 15px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.create-playlist-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.create-playlist-header p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.create-playlist-form-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    animation: slideUp 0.8s ease 0.2s both;
+}
+
+textarea {
+    resize: none;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.create-playlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.form-group label {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-icon {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input,
+.form-group textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 2px rgba(128, 0, 255, 0.3);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.char-count {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+.form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    justify-content: flex-end;
+}
+
+.cancel-button,
+.create-button {
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cancel-button {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cancel-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.create-button {
+    background: linear-gradient(90deg, purple, violet);
+    color: white;
+    border: none;
+    min-width: 180px;
+    justify-content: center;
+}
+
+.create-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.create-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.button-icon {
+    font-size: 14px;
+}
+
+.error-message {
+    background: rgba(255, 59, 48, 0.15);
+    color: #ff6b6b;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 3px solid #ff6b6b;
+    animation: shake 0.5s ease;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+@keyframes shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Cover image upload styles */
+.cover-upload-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.cover-preview {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.cover-preview:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+}
+
+.cover-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.upload-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 12px;
+}
+
+.upload-placeholder p {
+    margin: 0 0 8px;
+    font-weight: 500;
+}
+
+.upload-hint {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Fix for very small screens and specific devices */
+@media screen and (max-height: 700px) {
+    .create-playlist-content {
+        padding-top: 20px;
+        padding-bottom: 120px;
+    }
+}
+
+/* Medium screens */
+@media (max-width: 768px) {
+    .create-playlist-content {
+        padding: 30px 15px;
+    }
+    
+    .create-playlist-header h1 {
+        font-size: 30px;
+    }
+    
+    .create-playlist-form-container {
+        padding: 25px 20px;
+    }
+    
+    .cover-preview {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+/* Small screens */
+@media (max-width: 576px) {
+    .create-playlist-content {
+        padding: 20px 15px;
+    }
+    
+    .create-playlist-header h1 {
+        font-size: 28px;
+    }
+    
+    .create-playlist-header p {
+        font-size: 16px;
+    }
+    
+    .create-playlist-form-container {
+        padding: 20px 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .cancel-button,
+    .create-button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    
+    .cover-preview {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .upload-icon {
+        font-size: 30px;
+    }
+    
+    .upload-placeholder p {
+        font-size: 14px;
+    }
+    
+    .upload-hint {
+        font-size: 10px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+    .create-playlist-header h1 {
+        font-size: 24px;
+    }
+    
+    .create-playlist-header p {
+        font-size: 14px;
+    }
+    
+    .cover-preview {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .upload-icon {
+        font-size: 24px;
+        margin-bottom: 6px;
+    }
+    
+    .upload-placeholder p {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+    
+    .create-button, .cancel-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}

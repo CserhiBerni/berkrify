@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../../components/navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-//import "../auth.css";
+import "../auth.css";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../../components/navbar/Navbar';
-//import './ProfilePage.css';
+import './ProfilePage.css';
 import { FaUser, FaEdit, FaCalendarAlt, FaEnvelope, FaSave, FaTimesCircle } from 'react-icons/fa';
 
 interface UserProfile {
@@ -180,7 +180,7 @@ const ProfilePage: React.FC = () => {
     return (
       <div className="profile-page-container">
         <Navbar onSearch={() => { }} />
-        <div className="em">{error}</div>
+        <div className="error-message">{error}</div>
       </div>
     );
   }
@@ -189,7 +189,7 @@ const ProfilePage: React.FC = () => {
     return (
       <div className="profile-page-container">
         <Navbar onSearch={() => { }} />
-        <div className="em">Profile not found</div>
+        <div className="error-message">Profile not found</div>
       </div>
     );
   }
@@ -214,7 +214,7 @@ const ProfilePage: React.FC = () => {
         </div>
 
         {error && (
-          <div className="em">{error}</div>
+          <div className="error-message">{error}</div>
         )}
 
         <div className="profile-card">

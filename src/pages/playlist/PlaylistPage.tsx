@@ -9,7 +9,7 @@ import { usePlayer } from "../../components/services/service/PlayerContext";
 import { FaPlay, FaPause, FaTimes, FaPlus, FaHeart, FaEdit } from "react-icons/fa";
 import { FaShuffle } from "react-icons/fa6";
 import { ImLoop } from "react-icons/im";
-//import "./PlaylistPage.css";
+import "./PlaylistPage.css";
 
 interface PlaylistData {
     id: number;

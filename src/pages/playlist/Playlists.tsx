@@ -5,7 +5,7 @@ import { FaPlus, FaPlay, FaPause, FaHeart } from "react-icons/fa";
 import Navbar from "../../components/navbar/Navbar";
 import { usePlayer } from "../../components/services/service/PlayerContext";
 import { usePlaylists } from "../../components/services/service/PlaylistContext";
-//import "./Playlists.css";
+import "./Playlists.css";
 
 interface Playlist {
     id: number;
@@ -15,9 +15,7 @@ interface Playlist {
     songsCount: number;
     created_at: string;
     isLikedPlaylist?: boolean;
-    color?: string;
 }
-
 
 const Playlists: React.FC = () => {
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
@@ -53,11 +51,10 @@ const Playlists: React.FC = () => {
             const fetchedPlaylists = response.data;
 
             const processedPlaylists = fetchedPlaylists.map((playlist: Playlist) => {
-                const color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
                 if (playlist.name === "Liked Songs") {
-                    return { ...playlist, isLikedPlaylist: true, color: "#1e3a8a" };
+                    return { ...playlist, isLikedPlaylist: true };
                 }
-                return { ...playlist, color };
+                return playlist;
             });
 
             setPlaylists(processedPlaylists);
@@ -68,7 +65,6 @@ const Playlists: React.FC = () => {
             setLoading(false);
         }
     };
-
 
     const handleSearch = (query: string) => {
         setSearchTerm(query);
@@ -169,18 +165,15 @@ const Playlists: React.FC = () => {
                                             alt={`${playlist.name} cover`}
                                         />
                                     ) : (
-                                        <div
-                                            className="playlist-card-cover"
-                                            style={{
-                                                backgroundColor: playlist.color,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                fontSize: "36px",
-                                                color: "white"
-                                            }}
-                                        >
-
+                                        <div className="playlist-card-cover" style={{
+                                            backgroundColor: playlist.isLikedPlaylist ? '#1e3a8a' :
+                                                `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '36px',
+                                            color: 'white'
+                                        }}>
                                             {playlist.isLikedPlaylist ? (
                                                 <FaHeart />
                                             ) : (
