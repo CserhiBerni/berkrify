@@ -2,14 +2,16 @@ import { useEffect, useState, useRef } from "react";
 import { getSongs } from "../services/service/songService";
 import { Song } from "../services/class/types";
 import MusicCard from "../musiccard/MusicCard";
-import MusicPlayer from "../musicplayer/MusicPlayer";
 import "./MusicList.css";
 
 const NUM_ROWS = 4;
 
-const MusicList: React.FC = () => {
+interface MusicListProps {
+  onPlay: (song: Song) => void;
+}
+
+const MusicList: React.FC<MusicListProps> = ({ onPlay }) => {
     const [songs, setSongs] = useState<Song[]>([]);
-    const [currentSong, setCurrentSong] = useState<Song | null>(songs[0]);
     const scrollRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [showScrollButtons, setShowScrollButtons] = useState<boolean[]>([]);
 
@@ -82,6 +84,7 @@ const MusicList: React.FC = () => {
     };
 
     return (
+        <div className="bg-gradient-blue">
         <div className="music-list-wrapper">
             {groupedSongs.map((rowSongs, rowIndex) => (
                 <div key={rowIndex} className="music-row">
@@ -94,7 +97,7 @@ const MusicList: React.FC = () => {
                     >
                         <div className="music-list">
                             {rowSongs.map((song) => (
-                                <MusicCard key={song.id} song={song} onPlay={() => setCurrentSong(song)} />
+                                <MusicCard key={song.id} song={song} onPlay={() => onPlay(song)} />
                             ))}
                             <div className="music-list-end-space"></div>
                         </div>
@@ -118,12 +121,7 @@ const MusicList: React.FC = () => {
                     )}
                 </div>
             ))}
-            {currentSong && (
-                <div className="music-player-container">
-                    <MusicPlayer song={currentSong} songs={songs} onSongChange={(newSong: Song) => setCurrentSong(newSong)} />
-                </div>
-            )}
-
+        </div>
         </div>
     );
 };

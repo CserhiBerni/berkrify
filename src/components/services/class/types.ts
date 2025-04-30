@@ -8,12 +8,14 @@ export interface Song {
     genre: string;
     cover?: string;
     audioSrc: string;
+    path?: string;
 }
  
 export interface MusicPlayerProps {
     song: Song;
     songs: Song[];
-    onSongChange: (newSong: Song) => void;  
+    onSongChange: (song: Song) => void;
+    onPlayNext?: () => void;
+    onPlayPrevious?: () => void;
   }
- 
  

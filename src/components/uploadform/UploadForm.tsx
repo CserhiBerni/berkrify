@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../navbar/Navbar";
 import { uploadMp3, uploadCover } from "../services/service/uploadService";
+import MusicPlayer from "../musicplayer/MusicPlayer";
+import { usePlayer } from "../services/service/PlayerContext";
 import "./UploadForm.css";
 
 const UploadForm: React.FC = () => {
@@ -8,6 +10,7 @@ const UploadForm: React.FC = () => {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [mp3Url, setMp3Url] = useState<string | null>(null);
   const [coverUrl, setCoverUrl] = useState<string | null>(null);
+  const { currentSong } = usePlayer();
 
   const handleMp3Change = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -41,7 +44,7 @@ const UploadForm: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="upload-page-container">
       <Navbar onSearch={() => {}} />
       <div className="upload-container">
         <div className="card p-4 shadow">
@@ -89,6 +92,16 @@ const UploadForm: React.FC = () => {
           )}
         </div>
       </div>
+      
+      {currentSong && (
+        <div className="music-player-container">
+          <MusicPlayer
+            song={currentSong}
+            songs={[]}
+            onSongChange={() => {}}
+          />
+        </div>
+      )}
     </div>
   );
 };

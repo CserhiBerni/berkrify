@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Song } from "../class/types";
 
-const API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export const getSongById = async (id: string): Promise<Song> => {
   try {
@@ -33,5 +33,25 @@ export const getSongs = async (): Promise<Song[]> => {
   } catch (error) {
     console.error("API Error:", error);
     return [];
+  }
+};
+
+export const loadAndPlaySong = (audioRef: React.RefObject<HTMLAudioElement>, song: Song) => {
+  if (audioRef.current) {
+    audioRef.current.src = song.audioSrc;
+    audioRef.current.load();
+    const playPromise = audioRef.current.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          console.log("Audio playback started");
+        })
+        .catch(error => {
+          console.error("Playback error:", error);
+        });
+    }
+  } else {
+    console.error("Audio element is not available");
   }
 };

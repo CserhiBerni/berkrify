@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap");
 
 * {
+    padding-top: 0;
     margin: 0;
     font-family: "Alegreya", serif;
 
@@ -16,6 +17,14 @@
     -ms-user-select: none;
     -khtml-user-select: none;
 }
+
+body {
+    padding-top: 130px !important;
+  }
+
+:root {
+    --navbar-height: 80px;
+  }
 
 ::-webkit-scrollbar {
     width: 5px;
