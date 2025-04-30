@@ -26,6 +26,9 @@ npm install
 ```bash
 DATABASE_URL="mysql://root@localhost:3306/berkrify"
 ```
+```bash
+npx prisma generate
+```
  
 ### 4. Backend indítása debug módban
  
