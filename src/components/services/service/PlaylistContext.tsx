@@ -42,7 +42,7 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [likedSongs, setLikedSongs] = useState<Song[]>([]);
   const [likedSongsPlaylistId, setLikedSongsPlaylistId] = useState<number | null>(null);
   const currentUserId = useRef<string | null>(null);
-  
+
   const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   const resetPlaylistState = useCallback(() => {
@@ -66,9 +66,9 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       setPlaylists(response.data);
-      
+
       const likedPlaylist = response.data.find((p: Playlist) => p.name === "Liked Songs");
       if (likedPlaylist) {
         setLikedSongsPlaylistId(likedPlaylist.id);
@@ -86,27 +86,62 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setLikedSongs([]);
         return;
       }
-      
+
       const response = await axios.get(
         `${apiBaseUrl}/favorites`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      
+
       let likedSongsData: Song[] = [];
       if (Array.isArray(response.data)) {
         likedSongsData = response.data.map((item: any) => {
           return item.song || item;
         });
       }
-      
+
       setLikedSongs(likedSongsData);
     } catch (error) {
       console.error("Failed to fetch liked songs:", error);
       setLikedSongs([]);
     }
   }, [apiBaseUrl]);
+
+  const ensureLikedSongsPlaylist = useCallback(async (): Promise<number | null> => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    const likedPlaylist = playlists.find(p => p.name === "Liked Songs");
+
+    if (likedPlaylist) {
+      setLikedSongsPlaylistId(likedPlaylist.id);
+      return likedPlaylist.id;
+    }
+
+    try {
+      const response = await axios.post(
+        `${apiBaseUrl}/playlists`,
+        {
+          name: "Liked Songs",
+          description: "Songs you've liked"
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data && response.data.id) {
+        setLikedSongsPlaylistId(response.data.id);
+        await fetchPlaylists();
+        return response.data.id;
+      }
+    } catch (err) {
+      console.error("Failed to create Liked Songs playlist:", err);
+    }
+
+    return null;
+  }, [apiBaseUrl, playlists, fetchPlaylists]);
 
   useEffect(() => {
     const initialize = async () => {
@@ -115,7 +150,7 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         resetPlaylistState();
         return;
       }
-      
+
       try {
         const userData = localStorage.getItem("user");
         if (userData) {
@@ -125,46 +160,17 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       } catch (error) {
         console.error("Error parsing user data");
       }
-      
+
       await fetchPlaylists();
       await fetchLikedSongs();
     };
-    
+
     initialize();
   }, [fetchPlaylists, fetchLikedSongs, resetPlaylistState]);
-  
+
   useEffect(() => {
-    const ensureLikedSongsPlaylist = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      
-      const likedPlaylist = playlists.find(p => p.name === "Liked Songs");
-      
-      if (!likedPlaylist) {
-        try {
-          const response = await axios.post(
-            `${apiBaseUrl}/playlists`,
-            {
-              name: "Liked Songs",
-              description: "Songs you've liked"
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          
-          if (response.data && response.data.id) {
-            setLikedSongsPlaylistId(response.data.id);
-            fetchPlaylists();
-          }
-        } catch (err) {
-          console.error("Failed to create Liked Songs playlist:", err);
-        }
-      }
-    };
-    
     ensureLikedSongsPlaylist();
-  }, [playlists, apiBaseUrl, fetchPlaylists]);
+  }, [ensureLikedSongsPlaylist]);
 
   useEffect(() => {
     const handleLogout = () => {
@@ -187,10 +193,10 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
       }
     };
-    
+
     window.addEventListener('user-logout', handleLogout);
     window.addEventListener('user-login', handleLogin);
-    
+
     return () => {
       window.removeEventListener('user-logout', handleLogout);
       window.removeEventListener('user-login', handleLogin);
@@ -199,60 +205,57 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const addToLikedSongs = async (song: Song) => {
     if (!song) return;
-    
+
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-      
-      setLikedSongs(prev => {
-        if (!prev.some(s => s.id === song.id)) {
-          return [...prev, song];
-        }
-        return prev;
-      });
-      
+
+      const likedId = await ensureLikedSongsPlaylist();
+
       await axios.post(
         `${apiBaseUrl}/favorites`,
         { song_id: song.id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      if (likedSongsPlaylistId) {
-        await addSongToPlaylist(song.id, likedSongsPlaylistId);
+
+      if (likedId) {
+        await addSongToPlaylist(song.id, likedId);
       }
+
+      await fetchLikedSongs();
     } catch (error) {
       console.error("Error adding song to liked songs:", error);
-      fetchLikedSongs();
+      await fetchLikedSongs();
     }
   };
-  
+
   const removeFromLikedSongs = async (songId: string | number, playlistViewId?: number) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
-      
+
       setLikedSongs(prev => prev.filter(song => song.id !== songId));
-      
+
       if (playlistViewId && likedSongsPlaylistId === playlistViewId) {
         if (window.dispatchEvent) {
-          const event = new CustomEvent('playlistSongRemoved', { 
-            detail: { songId, playlistId: playlistViewId } 
+          const event = new CustomEvent('playlistSongRemoved', {
+            detail: { songId, playlistId: playlistViewId }
           });
           window.dispatchEvent(event);
         }
       }
-      
+
       await axios.delete(
         `${apiBaseUrl}/favorites/song/${songId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       if (likedSongsPlaylistId) {
         await axios.delete(
           `${apiBaseUrl}/playlists/${likedSongsPlaylistId}/songs/${songId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
+
         fetchPlaylists();
       }
     } catch (error) {
@@ -260,21 +263,20 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       fetchLikedSongs();
     }
   };
-  
+
   const addSongToPlaylist = async (songId: string | number, playlistId: number): Promise<boolean> => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return false;
-      
+
       await axios.post(
         `${apiBaseUrl}/playlists/${playlistId}/songs`,
-        { 
-          song_id: songId,
-          position: 0
+        {
+          song_id: songId
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       await fetchPlaylists();
       return true;
     } catch (error) {
@@ -292,7 +294,7 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         `${apiBaseUrl}/playlists/${playlistId}/songs/${songId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       await fetchPlaylists();
       return true;
     } catch (error) {
@@ -316,7 +318,7 @@ export const PlaylistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         { name, description },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       await fetchPlaylists();
       return response.data.id;
     } catch (error) {

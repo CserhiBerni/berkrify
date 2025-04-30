@@ -274,15 +274,12 @@
   }
 }
 
-.error-message {
-  background: rgba(255, 59, 48, 0.15);
+.em {
   color: #ff6b6b;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border-left: 3px solid #ff6b6b;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  animation: shake 0.5s ease;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
+  animation: shake 0.3s ease;
 }
 
 @keyframes shake {
@@ -302,6 +299,7 @@
     transform: translateX(5px);
   }
 }
+
 
 @media (max-width: 768px) {
   .profile-content {
